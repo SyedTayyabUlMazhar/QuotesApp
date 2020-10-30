@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#DF9A9A</color>
+    <color name="colorPrimaryDark">#C88B8B</color>
+    <color name="colorAccent">#3F91DB</color>
+
+    <color name="grey">#7B7B7B</color>
+    <color name="nav_item_selected">#A64343</color>
+    <color name="nav_item_selected_background">#3DDF9A9A</color>
+    <color name="quote_text">#333</color>
+    <color name="author_text">#333</color>
+    <color name="quote_heading">#CECECE</color>
+    <color name="author_heading">#CECECE</color>
+
+</resources>

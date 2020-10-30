@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.navigation.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigationView"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start|left"
+    app:headerLayout="@layout/navigation_header"
+    app:itemIconTint="@color/nav_item_icon_and_text_selector"
+    app:itemShapeAppearance="@style/NavItemStyle"
+    app:itemShapeFillColor="@color/nav_item_background_selector"
+    app:itemTextColor="@color/nav_item_icon_and_text_selector"
+    app:menu="@menu/navigation_items">
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textAllCaps="false"
+        android:layout_gravity="bottom|center_horizontal" />
+</com.google.android.material.navigation.NavigationView>

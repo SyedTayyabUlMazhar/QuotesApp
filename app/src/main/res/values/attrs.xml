@@ -1,0 +1,20 @@
+<resources>
+    <declare-styleable name="IconTextInput">
+        <attr name="hint" format="string" />
+        <attr name="icon" format="reference" />
+        <attr name="iconTint" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="android:inputType" />
+        <attr name="customFont" format="reference" />
+    </declare-styleable>
+
+
+    <declare-styleable name="IconTextInputAutoComplete">
+        <attr name="hint"/>
+        <attr name="icon" />
+        <attr name="iconTint" />
+        <attr name="textSize" />
+        <attr name="android:inputType" />
+        <attr name="customFont" />
+    </declare-styleable>
+</resources>
