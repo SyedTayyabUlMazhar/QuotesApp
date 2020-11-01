@@ -14,7 +14,15 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3cf14c1d-8253-49eb-8c91-0625308252a1" name="Default Changelist" comment="" />
+    <list default="true" id="3cf14c1d-8253-49eb-8c91-0625308252a1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/ConfirmationDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/ConfirmationDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/ActivityBase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/ActivityBase.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/ActivityHome.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/ActivityHome.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,7 +55,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1iJtqBprTUlAExuwa4bxgnW9Xvu" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -58,6 +70,7 @@
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-10-29T14:58:52.707Z" />
     <property name="ResourceManagerPrefKey.ResourceType" value="DRAWABLE" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/java" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res/layout" />
     <property name="project.structure.last.edited" value="SDK Location" />
@@ -186,10 +199,10 @@
       <screen x="0" y="0" width="1366" height="729" />
     </state>
     <state x="360" y="0" width="638" height="728" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1366.729@0.0.1366.729" timestamp="1603005090627" />
-    <state x="461" y="15" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1602225816340">
+    <state x="461" y="15" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1604230302959">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state x="461" y="15" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.1366.729@0.0.1366.729" timestamp="1602225816340" />
+    <state x="461" y="15" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.1366.729@0.0.1366.729" timestamp="1604230302959" />
     <state x="266" y="123" width="826" height="483" key="AndroidCreateResourceDirectoryDialog" timestamp="1602436879463">
       <screen x="0" y="0" width="1366" height="729" />
     </state>

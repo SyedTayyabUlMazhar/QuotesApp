@@ -1,3 +1,5 @@
+package com.magentastudio.quotesapp
+
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

@@ -1,19 +1,11 @@
 package com.magentastudio.quotesapp
 
-import ConfirmationDialog
 import android.content.Intent
-import android.opengl.Visibility
-import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
-import android.view.View
-import androidx.annotation.IdRes
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.activity_base.drawer
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.appbar.*
 import kotlinx.android.synthetic.main.navigation_view.*
 import kotlinx.android.synthetic.main.navigation_view.view.*

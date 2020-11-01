@@ -1,13 +1,9 @@
 package com.magentastudio.quotesapp
 
-import ConfirmationDialog
-import ConfirmationDialog.DialogButtonClickListener
+import com.magentastudio.quotesapp.ConfirmationDialog.DialogButtonClickListener
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
-import android.view.View
-import android.widget.Toast
 import androidx.core.view.GravityCompat
 import com.magentastudio.quotesapp.Model.Quote
 import kotlinx.android.synthetic.main.activity_home.*
