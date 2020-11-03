@@ -13,7 +13,7 @@ class ActivitySplash : AppCompatActivity() {
 
         val intent = when (null) {
             null -> Intent(this, ActivityLogin::class.java)
-            else -> Intent(this, ActivityHome::class.java)
+            else -> Intent(this, ActivityMain::class.java)
         }
 
         Handler().postDelayed({

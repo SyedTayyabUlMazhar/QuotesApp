@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,15 +13,12 @@
             android:id="@+id/appbar"
             layout="@layout/appbar" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_quotes"
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:itemCount="10"
-            tools:listitem="@layout/quote_box" />
-        
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnNewQuote"
             android:layout_width="wrap_content"
@@ -31,12 +26,11 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:src="@drawable/ic_add"
+            android:visibility="gone"
             app:backgroundTint="@android:color/white"
             app:tint="@color/colorPrimaryDark" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <include
-        layout="@layout/navigation_view"/>
+    <include layout="@layout/navigation_view" />
 </androidx.drawerlayout.widget.DrawerLayout>

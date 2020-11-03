@@ -3,17 +3,12 @@
     package="com.magentastudio.quotesapp">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ActivityMyQuotes"></activity>
-        <activity android:name=".ActivityFavorites" />
-        <activity android:name=".ActivityNewQuote" />
-        <activity android:name=".ActivityHome1" />
-        <activity android:name=".ActivityBase" />
         <activity android:name=".ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityHome" />
         <activity android:name=".ActivityLogin" />
+        <activity android:name=".ActivityMain" />
+        <activity android:name=".ActivityNewQuote" />
     </application>
 
 </manifest>
