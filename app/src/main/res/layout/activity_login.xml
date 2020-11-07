@@ -28,9 +28,9 @@
         android:inputType="textEmailAddress"
         app:hint="Email"
         app:icon="@drawable/ic_email"
+        app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/etPassword"
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintWidth_max="380dp"
         app:textSize="16dp" />
