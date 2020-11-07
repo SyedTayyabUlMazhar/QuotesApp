@@ -7,10 +7,13 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.IdRes
+import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.btnNewQuote
 import kotlinx.android.synthetic.main.activity_main.drawer
 import kotlinx.android.synthetic.main.appbar.*
+import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.navigation_view.*
 import kotlinx.android.synthetic.main.navigation_view.view.*
 
@@ -22,6 +25,7 @@ class ActivityMain : AppCompatActivity() {
 
         toolbar.setNavigationOnClickListener { drawer.openDrawer(Gravity.LEFT) }
 
+        loadProfilePictureAndName()
         navigationView.setNavigationItemSelectedListener { selectedItem(it.itemId) }
 
         navigationView.setCheckedItem(R.id.home) //home screen is shown first
@@ -31,6 +35,7 @@ class ActivityMain : AppCompatActivity() {
             dialogButtonClickListener = object : ConfirmationDialog.DialogButtonClickListener {
                 override fun yes() {
                     finish()
+                    FirebaseAuth.getInstance().signOut()
                     startActivity(Intent(this@ActivityMain, ActivityLogin::class.java))
                 }
             }
@@ -76,5 +81,18 @@ class ActivityMain : AppCompatActivity() {
             }
             else -> false
         }
+    }
+
+    fun loadProfilePictureAndName() {
+        val user = FirebaseAuth.getInstance().currentUser!!
+        user.photoUrl?.let { url ->
+            Glide
+                .with(this)
+                .load(url)
+                .centerCrop()
+                .into(navigationView.getHeaderView(0).ivProfilePicture)
+        }
+        navigationView.getHeaderView(0).tvUserName.setText(user.displayName)
+
     }
 }
