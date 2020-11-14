@@ -1,11 +1,16 @@
 package com.magentastudio.quotesapp
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +19,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
 import kotlinx.android.synthetic.main.quote_box.view.*
+import kotlin.reflect.KMutableProperty0
+
 
 class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
 {
@@ -90,6 +97,15 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
             downvote_icon.setTint(if (quote.downvoted) colors[0] else colors[1])
 
 
+
+            favorite_icon.setOnClickListener {
+                quote::favorited.flip()
+                favorite(quote)
+                notifyItemChanged(position, Unit)
+            }
+
+            share_icon.setOnClickListener { share(quote) }
+
             val listener = View.OnClickListener { buttonClicked ->
                 if (!quote.upvoted && !quote.downvoted)
                 {
@@ -118,6 +134,22 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
 
             upvote_icon.setOnClickListener(listener)
             downvote_icon.setOnClickListener(listener)
+        }
+    }
+
+    private fun share(quote: Quote)
+    {
+        Intent(Intent.ACTION_SEND).run {
+
+            type = "text/plain"
+
+            val shareBody = "${quote.quote}\n\n-${quote.author}"
+            val shareSub = "Quote"
+
+            putExtra(Intent.EXTRA_SUBJECT, shareSub)
+            putExtra(Intent.EXTRA_TEXT, shareBody)
+
+            startActivity(context, Intent.createChooser(this, "Share using"), null)
         }
     }
 
@@ -182,4 +214,27 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
         updateVotes(quote.docId, true)
     }
 
+
+    fun Context.copyToClipboard(text: CharSequence)
+    {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("label", text)
+
+        clipboard.setPrimaryClip(clip)
+    }
+
+    /**
+     * adds quote to the array of favorite quotes in db if quote.favorited==true else removes it.
+     */
+    fun favorite(quote: Quote)
+    {
+        quote.apply {
+            if (favorited)
+                userDocRef.update("favorites", FieldValue.arrayUnion(docId))
+            else
+                userDocRef.update("favorites", FieldValue.arrayRemove(docId))
+        }
+    }
+
+    fun KMutableProperty0<Boolean>.flip() = set(!get())
 }
