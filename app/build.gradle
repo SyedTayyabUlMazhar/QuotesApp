@@ -44,11 +44,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.3.2'
     implementation 'com.google.android.gms:play-services-auth:18.1.0' //for google auth
     implementation 'com.facebook.android:facebook-login:[5,6)' //for fb auth
-    // </AUTHENTICATION>
 
+// <Firestore>
     implementation 'com.google.firebase:firebase-firestore:21.6.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.6.0'
-
-
 
 }

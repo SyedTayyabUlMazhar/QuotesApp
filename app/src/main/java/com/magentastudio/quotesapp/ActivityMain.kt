@@ -50,7 +50,7 @@ class ActivityMain : AppCompatActivity() {
                 toolbar.setTitle("Home")
                 drawer.closeDrawer(Gravity.LEFT)
                 supportFragmentManager.beginTransaction()
-                    .replace(fragmentContainer.id, FragmentHome.newInstance("", ""))
+                    .replace(fragmentContainer.id, FragmentHome())
                     .commit()
 
                 btnNewQuote.visibility = View.VISIBLE

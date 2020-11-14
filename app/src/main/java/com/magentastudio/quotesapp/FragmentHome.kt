@@ -1,71 +1,86 @@
 package com.magentastudio.quotesapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObjects
+import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
 import kotlinx.android.synthetic.main.fragment_home.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val TAG = "FragmentHome"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FragmentHome.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FragmentHome : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+class FragmentHome : Fragment()
+{
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View?
+    {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentHome.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentHome().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    {
         super.onViewCreated(view, savedInstanceState)
-        listOf(
-            Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote()
-        ).let {
-            rv_quotes.adapter = QuoteAdapter(context!!, it)
-        }
+//        listOf(
+//            Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote()
+//        ).let {
+//            rv_quotes.adapter = QuoteAdapter(context!!, it)
+//        }
+
+        val db = Firebase.firestore
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+
+        val progressDialog = ProgressDialog(context)
+        progressDialog.show()
+
+        //get all quotes
+        db.collection("quotes").orderBy("votes", Query.Direction.DESCENDING).get()
+            .addOnSuccessListener { result ->
+
+                val quotes: List<Quote> = result.toObjects()
+
+                //find if each of the quotes were favorited, upvoted or downvoted by
+                //getting the doc IDs of quotes that user has favorited, upvoted, or downvoted.
+                //and then matching those doc Ids with IDs of quotes
+                db.collection("users").document(userId).get()
+                    .addOnSuccessListener { result ->
+                        val data = result.data!!
+
+                        val favorites = data["favorites"] as ArrayList<*>
+                        val upvoted = data["upvoted"] as ArrayList<*>
+                        val downvoted = data["downvoted"] as ArrayList<*>
+
+                        quotes.forEach { quote ->
+                            quote.favorited = favorites.contains(quote.docId)
+                            quote.upvoted = upvoted.contains(quote.docId)
+                            quote.downvoted = downvoted.contains(quote.docId)
+                        }
+                        rv_quotes.adapter = QuoteAdapter(context!!, quotes)
+
+                        progressDialog.dismiss()
+
+                        quotes.forEachIndexed { index, quote ->
+                            Log.i(TAG, "index=$index : quote=$quote")
+                        }
+                    }
+            }
+            .addOnFailureListener { exception ->
+                Log.i(TAG, "Error getting docs: ${exception.message}")
+                exception.printStackTrace()
+            }
 
     }
+
 }

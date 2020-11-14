@@ -64,7 +64,7 @@ class FragmentMyQuotes : Fragment() {
         listOf(
             Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote()
         ).let {
-            rv_quotes.adapter = QuoteAdapter(context!!, it, true)
+            rv_quotes.adapter = QuoteAdapter(context!!, it, true, true)
         }
 
     }
