@@ -6,15 +6,20 @@ import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.android.synthetic.main.activity_sign_up.*
 
-class ActivitySplash : AppCompatActivity() {
+class ActivitySplash : AppCompatActivity()
+{
     val TAG = "ActivitySplash"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        val intent = when (FirebaseAuth.getInstance().currentUser) {
+        val intent = when (FirebaseAuth.getInstance().currentUser)
+        {
             null -> Intent(this, ActivityLogin::class.java)
             else -> Intent(this, ActivityMain::class.java)
         }

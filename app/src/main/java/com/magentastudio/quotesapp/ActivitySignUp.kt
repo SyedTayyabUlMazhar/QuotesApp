@@ -17,12 +17,14 @@ import kotlinx.android.synthetic.main.activity_login.etEmail
 import kotlinx.android.synthetic.main.activity_login.etPassword
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
-class ActivitySignUp : AppCompatActivity() {
+class ActivitySignUp : AppCompatActivity()
+{
     private val TAG = "ActivitySignUp"
 
     private lateinit var auth: FirebaseAuth
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
@@ -32,13 +34,15 @@ class ActivitySignUp : AppCompatActivity() {
         btnLogin.setOnClickListener { finish() }
     }
 
-    fun signUp() {
+    fun signUp()
+    {
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
+                if (task.isSuccessful)
+                {
                     Log.d(TAG, "createUserWithEmail:success")
                     Toast.makeText(baseContext, "Account creation successful", Toast.LENGTH_SHORT)
                         .show()
@@ -47,9 +51,10 @@ class ActivitySignUp : AppCompatActivity() {
                         UserProfileChangeRequest.Builder().setDisplayName(etName.text.toString())
                             .build()
                     )
-
                     updateUI(user)
-                } else {
+                }
+                else
+                {
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(baseContext, task.exception?.message, Toast.LENGTH_SHORT).show()
                     updateUI(null)
@@ -57,7 +62,8 @@ class ActivitySignUp : AppCompatActivity() {
             }
     }
 
-    private fun updateUI(user: FirebaseUser?) {
+    private fun updateUI(user: FirebaseUser?)
+    {
         user?.let {
             Log.i(TAG, "email: ${it.email} \nname: ${it.displayName} ")
             finish()
