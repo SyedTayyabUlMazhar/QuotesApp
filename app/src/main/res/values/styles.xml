@@ -11,4 +11,15 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">10dp</item>
     </style>
+
+    <style name="SettingsBackgroundCardView" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/SettingsBackgroundCardViewCorners</item>
+    </style>
+
+
+    <style name="SettingsBackgroundCardViewCorners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">45dp</item>
+        <item name="cornerSizeTopLeft">45dp</item>
+    </style>
 </resources>

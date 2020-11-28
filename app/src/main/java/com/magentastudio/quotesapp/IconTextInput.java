@@ -34,12 +34,13 @@ public class IconTextInput extends ConstraintLayout
     private View bottomBorder;
 
     /*Attributes values*/
-    private String hint;
-    private Drawable icon;
-    private @ColorInt int iconTint;
-    private float textSize;
-    private int typeOfInput;
-    private int customFont;
+    private final String hint;
+    private final Drawable icon;
+    private @ColorInt
+    final int iconTint;
+    private final float textSize;
+    private final int typeOfInput;
+    private final int customFont;
 
     public IconTextInput(Context context, AttributeSet attrs)
     {

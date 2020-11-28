@@ -2,7 +2,9 @@ package com.magentastudio.quotesapp.Model
 
 import com.google.firebase.firestore.DocumentId
 
-class Quote {
+class Quote
+{
+
 
     @DocumentId
     lateinit var docId: String
@@ -18,7 +20,8 @@ class Quote {
     var upvoted = false
     var downvoted = false
 
-    override fun toString(): String {
+    override fun toString(): String
+    {
         return "id:$docId user:$user votes:$votes quote:$quote author:$author favorited:$favorited upvoted:$upvoted downvoted:$downvoted"
     }
 }
