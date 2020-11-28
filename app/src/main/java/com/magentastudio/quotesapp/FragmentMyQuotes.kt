@@ -1,71 +1,93 @@
 package com.magentastudio.quotesapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
+import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
+import com.magentastudio.quotesapp.Model.User
 import kotlinx.android.synthetic.main.fragment_my_quotes.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class FragmentMyQuotes : Fragment()
+{
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FragmentMyQuotes.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FragmentMyQuotes : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    val TAG = "FragmentMyQuotes"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View?
+    {
         return inflater.inflate(R.layout.fragment_my_quotes, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentMyQuotes.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentMyQuotes().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    {
         super.onViewCreated(view, savedInstanceState)
-        listOf(
-            Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote()
-        ).let {
-            rv_quotes.adapter = QuoteAdapter(context!!, it, true, true)
+//        mutableListOf(
+//            Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote()
+//        ).let {
+//            rv_quotes.adapter = QuoteAdapter(context!!, it, true, true)
+//        }
+
+        MainScope().launch {
+            val d = ProgressDialog(context!!)
+            d.show()
+
+            val myQuotes = fetchMyQuotes()
+            rv_quotes.adapter = QuoteAdapter(context!!, myQuotes, true)
+
+            d.dismiss()
         }
 
+    }
+
+    suspend fun fetchMyQuotes(): MutableList<Quote> = withContext(IO) {
+
+        val db = Firebase.firestore
+        val userId = FirebaseAuth.getInstance().currentUser!!.uid
+        var quotes = listOf<Quote>()
+
+        try
+        {
+            // non-null asserted because user doc is created after email/password signup or if first time google/fb login.
+            val user = db.document("/users/$userId").get().await().toObject<User>()!!
+
+            quotes = db.collection("quotes").whereEqualTo("user.id", userId)
+                .orderBy("votes", Query.Direction.DESCENDING).get().await().toObjects()
+
+            quotes.forEach { user.setUpQuote(it) }
+
+        } catch (e: Exception)
+        {
+            e.printStackTrace()
+            Log.e(TAG, "Error getting quotes: ${e.message}")
+            showToast("Oops, couldn't get the quotes.")
+        }
+
+        quotes.toMutableList()
+
+    }
+
+    suspend fun showToast(message: String) = withContext(Dispatchers.Main)
+    {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }

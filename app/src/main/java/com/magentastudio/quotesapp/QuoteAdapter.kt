@@ -1,15 +1,11 @@
 package com.magentastudio.quotesapp
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,17 +15,24 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
 import kotlinx.android.synthetic.main.quote_box.view.*
-import kotlin.reflect.KMutableProperty0
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 
-class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
+class QuoteAdapter(
+    var context: Context,
+    var quotes: MutableList<Quote>,
+    var allowDeletion: Boolean = false,
+    var dummy: Boolean = false,
+    var showOnlyFavorites: Boolean = false
+) : RecyclerView.Adapter<QuoteAdapter.ViewHolder>()
 {
 
-    var context: Context
-    var quotes: List<Quote>
-    var allowDeletion: Boolean
-
-    var dummy: Boolean
 
     val TAG = "QuoteAdapter"
 
@@ -40,24 +43,8 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
     val colors = arrayOf(R.color.colorAccent, R.color.item_unselected)
 
 
-    constructor(
-        context: Context,
-        quotes: List<Quote>,
-        allowDeletion: Boolean = false,
-        dummy: Boolean = false
-    ) : super()
-    {
-
-        this.context = context
-        this.quotes = quotes
-        this.allowDeletion = allowDeletion
-
-        this.dummy = dummy
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
     {
-
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.quote_box, parent, false).apply {
             if (allowDeletion) delete_icon.visibility = View.VISIBLE
@@ -84,7 +71,7 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
 
 
         holder.itemView.apply {
-            Glide.with(context).load(quote.user["photo"]).into(iv_userpic)
+            Glide.with(context).load(quote.user["photo"]).into(iv_profilePicture)
             tv_username.text = quote.user["name"]
 
             tv_quote.text = quote.quote
@@ -101,7 +88,24 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
             favorite_icon.setOnClickListener {
                 quote::favorited.flip()
                 favorite(quote)
-                notifyItemChanged(position, Unit)
+                if (showOnlyFavorites && !quote.favorited)
+                {
+                    quotes.removeAt(position)
+                    notifyItemRemoved(position)
+                }
+                else
+                    notifyItemChanged(position, Unit)
+            }
+
+            delete_icon.setOnClickListener {
+                CoroutineScope(Main).launch {
+                    val deleteSuccess = delete(quote)
+                    if (deleteSuccess)
+                    {
+                        quotes.removeAt(position)
+                        notifyItemRemoved(position)
+                    }
+                }
             }
 
             share_icon.setOnClickListener { share(quote) }
@@ -111,21 +115,21 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
                 {
                     when (buttonClicked)
                     {
-                        upvote_icon -> upvote(quote, this)
-                        else        -> downvote(quote, this)
+                        upvote_icon -> upvote(quote)
+                        else        -> downvote(quote)
                     }
                 }
                 else if (quote.upvoted)
                 {
-                    undoUpvote(quote, this)
+                    undoUpvote(quote)
                     if (buttonClicked == downvote_icon)
-                        downvote(quote, this)
+                        downvote(quote)
                 }
                 else /*if(quote.downvoted)*/
                 {
-                    undoDownvote(quote, this)
+                    undoDownvote(quote)
                     if (buttonClicked == upvote_icon)
-                        upvote(quote, this)
+                        upvote(quote)
                 }
 
                 notifyItemChanged(position, Unit)
@@ -135,7 +139,14 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
             upvote_icon.setOnClickListener(listener)
             downvote_icon.setOnClickListener(listener)
         }
+
     }
+
+
+    override fun getItemCount(): Int = quotes.size
+
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     private fun share(quote: Quote)
     {
@@ -153,18 +164,6 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
         }
     }
 
-    override fun getItemCount(): Int = quotes.size
-
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-
-    fun ImageView.setTint(@ColorRes color: Int)
-    {
-        setColorFilter(
-            resources.getColor(color), android.graphics.PorterDuff.Mode.SRC_IN
-        )
-    }
-
     /**
      * increments or decrements the vote count of quote by 1.
      * @param increase whether to increment or decrement the vote count
@@ -177,16 +176,17 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
     }
 
 
-    fun upvote(quote: Quote, view: View)
+    fun upvote(quote: Quote)
     {
         quote.upvoted = true
         quote.votes++
+
 
         userDocRef.update("upvoted", FieldValue.arrayUnion(quote.docId))
         updateVotes(quote.docId, true)
     }
 
-    fun undoUpvote(quote: Quote, view: View)
+    fun undoUpvote(quote: Quote)
     {
         quote.upvoted = false
         quote.votes--
@@ -195,7 +195,7 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
         updateVotes(quote.docId, false)
     }
 
-    fun downvote(quote: Quote, view: View)
+    fun downvote(quote: Quote)
     {
         quote.downvoted = true
         quote.votes--
@@ -205,7 +205,7 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
     }
 
 
-    fun undoDownvote(quote: Quote, view: View)
+    fun undoDownvote(quote: Quote)
     {
         quote.downvoted = false
         quote.votes++
@@ -214,14 +214,6 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
         updateVotes(quote.docId, true)
     }
 
-
-    fun Context.copyToClipboard(text: CharSequence)
-    {
-        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("label", text)
-
-        clipboard.setPrimaryClip(clip)
-    }
 
     /**
      * adds quote to the array of favorite quotes in db if quote.favorited==true else removes it.
@@ -232,9 +224,29 @@ class QuoteAdapter : RecyclerView.Adapter<QuoteAdapter.ViewHolder>
             if (favorited)
                 userDocRef.update("favorites", FieldValue.arrayUnion(docId))
             else
+            {
                 userDocRef.update("favorites", FieldValue.arrayRemove(docId))
+            }
         }
     }
 
-    fun KMutableProperty0<Boolean>.flip() = set(!get())
+    /**
+     * Deletes quote from firestore
+     * @return true if deletion successful false otherwise
+     */
+    suspend fun delete(quote: Quote): Boolean = withContext(IO) {
+        try
+        {
+            db.document("/quotes/${quote.docId}").delete().await()
+            true
+
+        } catch (e: Exception)
+        {
+            e.printStackTrace()
+            Log.e(TAG, "Failed to delete quote:${quote.docId} error: ${e.message}")
+            context.showToast("Couldn't delete the quote.")
+            false
+        }
+    }
+
 }

@@ -8,7 +8,12 @@ import android.view.Gravity
 import android.view.View
 import androidx.annotation.IdRes
 import com.bumptech.glide.Glide
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthCredential
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.btnNewQuote
 import kotlinx.android.synthetic.main.activity_main.drawer
@@ -18,8 +23,10 @@ import kotlinx.android.synthetic.main.navigation_view.*
 import kotlinx.android.synthetic.main.navigation_view.view.*
 
 @SuppressLint("RtlHardcoded")
-class ActivityMain : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+class ActivityMain : AppCompatActivity()
+{
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -28,14 +35,16 @@ class ActivityMain : AppCompatActivity() {
         loadProfilePictureAndName()
         navigationView.setNavigationItemSelectedListener { selectedItem(it.itemId) }
 
-        navigationView.setCheckedItem(R.id.home) //home screen is shown first
-        selectedItem(R.id.home)
+        navigationView.setCheckedItem(R.id.setting) //home screen is shown first
+        selectedItem(R.id.setting)
 
         ConfirmationDialog(this, "Are you sure you want to logout?").apply {
-            dialogButtonClickListener = object : ConfirmationDialog.DialogButtonClickListener {
-                override fun yes() {
+            dialogButtonClickListener = object : ConfirmationDialog.DialogButtonClickListener
+            {
+                override fun yes()
+                {
                     finish()
-                    FirebaseAuth.getInstance().signOut()
+                    logout()
                     startActivity(Intent(this@ActivityMain, ActivityLogin::class.java))
                 }
             }
@@ -44,10 +53,20 @@ class ActivityMain : AppCompatActivity() {
 
     }
 
-    fun selectedItem(@IdRes id: Int): Boolean {
-        return when (id) {
-            R.id.home -> {
-                toolbar.setTitle("Home")
+    private fun logout()
+    {
+        FirebaseAuth.getInstance().signOut()
+        LoginManager.getInstance().logOut()
+        GoogleSignIn.getClient(applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut()
+    }
+
+    fun selectedItem(@IdRes id: Int): Boolean
+    {
+        return when (id)
+        {
+            R.id.home ->
+            {
+                toolbar.title = "Home"
                 drawer.closeDrawer(Gravity.LEFT)
                 supportFragmentManager.beginTransaction()
                     .replace(fragmentContainer.id, FragmentHome())
@@ -59,31 +78,45 @@ class ActivityMain : AppCompatActivity() {
                 }
                 true
             }
-            R.id.favorites -> {
-                toolbar.setTitle("Favorites")
+            R.id.favorites ->
+            {
+                toolbar.title = "Favorites"
                 drawer.closeDrawer(Gravity.LEFT)
                 supportFragmentManager.beginTransaction()
-                    .replace(fragmentContainer.id, FragmentFavorites.newInstance("", ""))
+                    .replace(fragmentContainer.id, FragmentFavorites())
                     .commit()
 
                 btnNewQuote.visibility = View.GONE
                 true
             }
-            R.id.myQuotes -> {
+            R.id.myQuotes ->
+            {
                 drawer.closeDrawer(Gravity.LEFT)
-                toolbar.setTitle("My Quotes")
+                toolbar.title = "My Quotes"
                 supportFragmentManager.beginTransaction()
-                    .replace(fragmentContainer.id, FragmentMyQuotes.newInstance("", ""))
+                    .replace(fragmentContainer.id, FragmentMyQuotes())
                     .commit()
 
                 btnNewQuote.visibility = View.GONE
                 true
             }
-            else -> false
+            R.id.setting ->
+            {
+                drawer.closeDrawer(Gravity.LEFT)
+                toolbar.title = "Profile"
+                supportFragmentManager.beginTransaction()
+                    .replace(fragmentContainer.id, FragmentSetting())
+                    .commit()
+
+                btnNewQuote.visibility = View.GONE
+                true
+            }
+            else           -> false
         }
     }
 
-    fun loadProfilePictureAndName() {
+    fun loadProfilePictureAndName()
+    {
         val user = FirebaseAuth.getInstance().currentUser!!
         user.photoUrl?.let { url ->
             Glide
@@ -92,7 +125,7 @@ class ActivityMain : AppCompatActivity() {
                 .centerCrop()
                 .into(navigationView.getHeaderView(0).ivProfilePicture)
         }
-        navigationView.getHeaderView(0).tvUserName.setText(user.displayName)
+        navigationView.getHeaderView(0).tvUserName.text = user.displayName
 
     }
 }

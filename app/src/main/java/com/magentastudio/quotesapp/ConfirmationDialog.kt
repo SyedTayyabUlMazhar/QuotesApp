@@ -7,7 +7,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class ConfirmationDialog(context: Context, note: String) {
 
     lateinit var dialog: AlertDialog
-    lateinit var dialogButtonClickListener: DialogButtonClickListener
+    var dialogButtonClickListener: DialogButtonClickListener? = null
 
     init {
         dialog = MaterialAlertDialogBuilder(context).setMessage(note)

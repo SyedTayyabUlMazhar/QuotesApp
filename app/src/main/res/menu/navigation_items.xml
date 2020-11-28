@@ -18,6 +18,12 @@
             android:icon="@drawable/ic_folder"
             android:iconTint="@color/grey"
             android:title="My Quotes" />
+
+        <item
+            android:id="@+id/setting"
+            android:icon="@drawable/ic_settings"
+            android:iconTint="@color/grey"
+            android:title="Setting" />
     </group>
 </menu>
 
