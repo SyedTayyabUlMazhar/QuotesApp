@@ -1,0 +1,33 @@
+- When login pressed
+	+ just do normal email/password login an go to home screen on success
+
+
+- When continue with google/fb pressed 
+	+ Authorize with them and firebase 
+	+ Logout of fb/google.
+	+ If userdoc exist
+		- go to home screen
+	+ If userdoc not exist
+		- Logout of firebase
+		- send fb/google token to signup activity
+	
+
+- When signup pressed on login screen
+	+ open signup activity with SIGN_UP_METHOD = DIRECT
+	
+
+
+-SignUp Activity
+	+ If SIGN_UP_METHOD = DIRECT
+		- on pressing signup
+			- email or name or passwords empty, or passwords not match THEN return
+			- perform email/password signup
+				+ when success uploadImageAndName()
+	+ else
+		- authenticate with fb/google token
+		- when success uploadImageAndName()
+
+	+ uploadImageAndName()
+		- when success create user doc, upload image and name.
+
+

@@ -6,21 +6,21 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:paddingHorizontal="8dp"
-    tools:context=".FragmentSetting">
+    tools:context=".UI.Screen.FragmentSetting">
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/iv_profilePicture"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="@dimen/profile_pic"
+        android:layout_height="@dimen/profile_pic"
         android:layout_marginTop="5dp"
-        android:elevation="4dp"
+        android:elevation="@dimen/profile_pic_elevation"
         android:scaleType="fitCenter"
-        app:civ_border_color="#FFF"
-        app:civ_border_width="4dp"
+        app:civ_border_color="@color/profile_pic_border"
+        app:civ_border_width="@dimen/profile_pic_border"
         app:civ_shadow="true"
-        app:civ_shadow_color="#5C5C5C"
+        app:civ_shadow_color="@color/profile_pic_shadow"
         app:civ_shadow_gravity="bottom"
-        app:civ_shadow_radius="3dp"
+        app:civ_shadow_radius="@dimen/profile_pic_shadow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,19 +28,19 @@
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/iv_cameraIcon"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
+        android:layout_width="@dimen/camera_icon"
+        android:layout_height="@dimen/camera_icon"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:elevation="4dp"
+        android:elevation="@dimen/camera_icon_elevation"
         android:focusable="true"
         android:scaleType="centerInside"
-        app:civ_border_color="#FFF"
-        app:civ_border_width="4dp"
+        app:civ_border_color="@color/camera_icon_border"
+        app:civ_border_width="@dimen/camera_icon_border"
         app:civ_shadow="true"
-        app:civ_shadow_color="#FF5C5C5C"
+        app:civ_shadow_color="@color/camera_icon_shadow"
         app:civ_shadow_gravity="bottom"
-        app:civ_shadow_radius="3dp"
+        app:civ_shadow_radius="@dimen/camera_icon_shadow"
         app:layout_constraintBottom_toBottomOf="@id/iv_profilePicture"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintLeft_toLeftOf="@+id/iv_profilePicture"
@@ -64,12 +64,12 @@
             android:paddingHorizontal="8dp">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tv_usernameBig"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="44dp"
                 android:text="@string/john_doe"
-                android:textColor="@color/settings_username"
+                android:textColor="@color/username_dark"
                 android:textSize="22dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -86,7 +86,7 @@
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_usernameBig" />
 
             <EditText
                 android:id="@+id/et_username"

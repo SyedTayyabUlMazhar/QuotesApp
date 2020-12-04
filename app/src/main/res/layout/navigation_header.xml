@@ -4,37 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
-    android:elevation="3dp"
+    android:background="@color/header"
+    android:elevation="8dp"
     tools:ignore="RtlHardcoded">
 
 
+    <!--    <com.mikhaellopez.circularimageview.CircularImageView-->
+    <!--        android:id="@+id/ivProfilePicture"-->
+    <!--        android:layout_width="96dp"-->
+    <!--        android:layout_height="96dp"-->
+    <!--        android:layout_marginLeft="16dp"-->
+    <!--        android:layout_marginTop="48dp"-->
+    <!--        android:elevation="3dp"-->
+    <!--        android:scaleType="centerCrop"-->
+    <!--        app:civ_border_color="#FFF"-->
+    <!--        app:civ_border_width="0dp"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:srcCompat="@drawable/avatar" />-->
+
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/ivProfilePicture"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:id="@+id/iv_profilePicture"
+        android:layout_width="@dimen/profile_pic"
+        android:layout_height="@dimen/profile_pic"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="48dp"
-        android:elevation="3dp"
-        android:scaleType="centerCrop"
-        app:civ_border_color="#FFF"
-        app:civ_border_width="0dp"
+        android:elevation="@dimen/profile_pic_elevation"
+        android:scaleType="fitCenter"
+        app:civ_border_color="@color/profile_pic_border"
+        app:civ_border_width="@dimen/profile_pic_border"
+        app:civ_shadow="true"
+        app:civ_shadow_color="@color/profile_pic_shadow"
+        app:civ_shadow_gravity="bottom"
+        app:civ_shadow_radius="@dimen/profile_pic_shadow"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/avatar" />
-
-<!--    <ImageView-->
-<!--        android:id="@+id/camera_icon"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/circle"-->
-<!--        android:padding="4dp"-->
-<!--        android:clickable="true"-->
-<!--        android:src="@drawable/ic_camera"-->
-<!--        android:elevation="4dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="@id/ivProfilePicture"-->
-<!--        app:layout_constraintRight_toRightOf="@id/ivProfilePicture"/>-->
-
 
     <TextView
         android:id="@+id/tvUserName"
@@ -46,14 +51,14 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:text="@string/john_doe"
-        android:textColor="@android:color/white"
+        android:textColor="@color/username_dark"
         android:textSize="24dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="@id/ivProfilePicture"
+        app:layout_constraintLeft_toLeftOf="@id/iv_profilePicture"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivProfilePicture"
+        app:layout_constraintTop_toBottomOf="@id/iv_profilePicture"
         tools:ignore="SpUsage" />
 
 

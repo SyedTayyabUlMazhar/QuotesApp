@@ -1,4 +1,4 @@
-package com.magentastudio.quotesapp
+package com.magentastudio.quotesapp.UI.Adapter
 
 import android.content.Context
 import android.content.Intent
@@ -13,7 +13,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.magentastudio.quotesapp.Model.Quote
+import com.magentastudio.quotesapp.R
+import com.magentastudio.quotesapp.UI.Common.flip
+import com.magentastudio.quotesapp.UI.Common.setTint
+import com.magentastudio.quotesapp.UI.Common.showToastMainCoroutine
 import kotlinx.android.synthetic.main.quote_box.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -25,11 +30,11 @@ import java.lang.Exception
 
 
 class QuoteAdapter(
-    var context: Context,
-    var quotes: MutableList<Quote>,
-    var allowDeletion: Boolean = false,
-    var dummy: Boolean = false,
-    var showOnlyFavorites: Boolean = false
+        var context: Context,
+        var quotes: MutableList<Quote>,
+        var allowDeletion: Boolean = false,
+        var dummy: Boolean = false,
+        var showOnlyFavorites: Boolean = false
 ) : RecyclerView.Adapter<QuoteAdapter.ViewHolder>()
 {
 
@@ -71,7 +76,9 @@ class QuoteAdapter(
 
 
         holder.itemView.apply {
-            Glide.with(context).load(quote.user["photo"]).into(iv_profilePicture)
+            val imageRef = Firebase.storage.reference.child(quote.user["profilePicPath"]!!)
+            Glide.with(context).load(imageRef).into(iv_profilePicture)
+//            Glide.with(context).load(quote.user["photo"]).into(iv_profilePicture)
             tv_username.text = quote.user["name"]
 
             tv_quote.text = quote.quote
@@ -240,11 +247,12 @@ class QuoteAdapter(
             db.document("/quotes/${quote.docId}").delete().await()
             true
 
-        } catch (e: Exception)
+        }
+        catch (e: Exception)
         {
             e.printStackTrace()
             Log.e(TAG, "Failed to delete quote:${quote.docId} error: ${e.message}")
-            context.showToast("Couldn't delete the quote.")
+            context.showToastMainCoroutine("Couldn't delete the quote.")
             false
         }
     }

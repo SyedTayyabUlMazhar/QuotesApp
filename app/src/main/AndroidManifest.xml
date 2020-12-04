@@ -13,17 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ActivitySignUp" />
-        <activity android:name=".ActivitySplash">
+        <activity android:name=".UI.Screen.ActivitySignUp" />
+        <activity android:name=".UI.Screen.ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityLogin" />
-        <activity android:name=".ActivityMain" />
-        <activity android:name=".ActivityNewQuote" />
+        <activity android:name=".UI.Screen.ActivityLogin" />
+        <activity android:name=".UI.Screen.ActivityMain" />
+        <activity android:name=".UI.Screen.ActivityNewQuote" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

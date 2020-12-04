@@ -1,4 +1,4 @@
-package com.magentastudio.quotesapp;
+package com.magentastudio.quotesapp.UI.Common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.res.ResourcesCompat;
+
+import com.magentastudio.quotesapp.R;
 
 
 public class IconTextInput extends ConstraintLayout

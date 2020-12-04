@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="profile_pic">110dp</dimen>
+    <dimen name="profile_pic_elevation">4dp</dimen>
+    <dimen name="profile_pic_border">4dp</dimen>
+    <dimen name="profile_pic_shadow">3dp</dimen>
+
+    <dimen name="camera_icon">46dp</dimen>
+    <dimen name="camera_icon_elevation">4dp</dimen>
+    <dimen name="camera_icon_border">4dp</dimen>
+    <dimen name="camera_icon_shadow">3dp</dimen>
+</resources>

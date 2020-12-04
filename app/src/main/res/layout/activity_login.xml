@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="16dp"
     android:paddingVertical="32dp"
-    tools:context=".ActivityLogin">
+    tools:context=".UI.Screen.ActivityLogin">
 
 
     <ImageView
@@ -15,13 +15,16 @@
         android:layout_height="80dp"
         android:layout_marginBottom="24dp"
         android:src="@drawable/logo"
+        android:focusable="false"
+        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        android:contentDescription="Logo" />
 
-    <com.magentastudio.quotesapp.IconTextInput
+    <com.magentastudio.quotesapp.UI.Common.IconTextInput
         android:id="@+id/etEmail"
         android:layout_width="0dp"
         android:layout_height="48dp"
@@ -35,7 +38,7 @@
         app:layout_constraintWidth_max="380dp"
         app:textSize="16dp" />
 
-    <com.magentastudio.quotesapp.IconTextInput
+    <com.magentastudio.quotesapp.UI.Common.IconTextInput
         android:id="@+id/etPassword"
         android:layout_width="0dp"
         android:layout_height="48dp"

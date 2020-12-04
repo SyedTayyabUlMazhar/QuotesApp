@@ -1,14 +1,22 @@
-package com.magentastudio.quotesapp
+package com.magentastudio.quotesapp.UI.Common
 
 import android.content.Context
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.ColorRes
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.reflect.KMutableProperty0
 
-suspend fun Context.showToast(message: String) = withContext(Dispatchers.Main)
+suspend fun Context.showToastMainCoroutine(message: String) = withContext(Dispatchers.Main)
+{
+    Toast.makeText(this@showToastMainCoroutine, message, Toast.LENGTH_LONG).show()
+}
+
+fun Context.showToast(message: String)
 {
     Toast.makeText(this@showToast, message, Toast.LENGTH_LONG).show()
 }
@@ -26,3 +34,7 @@ fun ImageView.setTint(@ColorRes color: Int)
     )
 }
 
+fun String.toStorageReference(): StorageReference
+{
+    return Firebase.storage.getReferenceFromUrl(this)
+}
