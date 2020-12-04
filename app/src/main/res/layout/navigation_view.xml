@@ -16,7 +16,7 @@
         android:id="@+id/btnLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
         android:text="Logout"
-        android:textAllCaps="false"
-        android:layout_gravity="bottom|center_horizontal" />
+        android:textAllCaps="false" />
 </com.google.android.material.navigation.NavigationView>

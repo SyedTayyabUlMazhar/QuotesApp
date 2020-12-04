@@ -23,7 +23,7 @@
             android:id="@+id/setting"
             android:icon="@drawable/ic_settings"
             android:iconTint="@color/grey"
-            android:title="Setting" />
+            android:title="Profile" />
     </group>
 </menu>
 

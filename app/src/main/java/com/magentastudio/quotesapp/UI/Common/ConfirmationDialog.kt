@@ -1,4 +1,4 @@
-package com.magentastudio.quotesapp
+package com.magentastudio.quotesapp.UI.Common
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog

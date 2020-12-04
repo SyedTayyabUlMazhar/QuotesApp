@@ -1,11 +1,10 @@
 package com.magentastudio.quotesapp.Model
 
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 
 class Quote
 {
-
-
     @DocumentId
     lateinit var docId: String
 
@@ -16,9 +15,30 @@ class Quote
 
     var votes: Long = 0
 
+
+    // <not part of the doc>
+    @get:Exclude
     var favorited = false
+
+    @get:Exclude
     var upvoted = false
+
+    @get:Exclude
     var downvoted = false
+
+    constructor()
+    {
+    }
+
+
+    constructor(quote: String, author: String, user: Map<String, String>, votes: Long)
+    {
+        this.quote = quote
+        this.author = author
+        this.user = user
+        this.votes = votes
+    }
+    // </not part of the doc>
 
     override fun toString(): String
     {

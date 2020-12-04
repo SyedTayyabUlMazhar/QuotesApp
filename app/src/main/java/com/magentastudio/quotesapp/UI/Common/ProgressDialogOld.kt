@@ -1,17 +1,16 @@
-package com.magentastudio.quotesapp
+package com.magentastudio.quotesapp.UI.Common
 
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.widget.ProgressBar
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import javax.annotation.Nullable
+import java.lang.Exception
 
-class ProgressDialog : AlertDialog
+class ProgressDialogOld : AlertDialog
 {
     constructor(context: Context?) : super(context)
     {
@@ -31,17 +30,20 @@ class ProgressDialog : AlertDialog
      * Shows a progress dialog until the suspend block is completed.
      * @param block A suspend block that runs in MainScope.
      */
-    fun untilCompletes(block: suspend () -> Unit)
-    {
-        MainScope().launch {
-            show()
+    fun untilCompletes(block: suspend () -> Unit): Job = MainScope().launch {
+        show()
 
-            block()
-
+        block()
+//            View=com.android.internal.policy.impl.PhoneWindow$DecorView{25dc0e16 V.E..... R......D 0,0-636,72} not attached to window manager
+        //            android.view.WindowLeaked: Activity com.magentastudio.quotesapp.UI.Screen.ActivitySignUp has leaked
+        try
+        {
             dismiss()
+        } catch (e: Exception)
+        {
         }
-    }
 
+    }
 
 }
 

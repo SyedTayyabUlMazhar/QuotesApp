@@ -1,4 +1,4 @@
-package com.magentastudio.quotesapp
+package com.magentastudio.quotesapp.UI.Screen
 
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +15,10 @@ import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
 import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.R
+import com.magentastudio.quotesapp.UI.Common.ProgressDialogOld
+import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter
+import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import kotlinx.android.synthetic.main.fragment_my_quotes.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
@@ -29,18 +33,13 @@ class FragmentMyQuotes : Fragment()
 
     val TAG = "FragmentMyQuotes"
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View?
-    {
-        return inflater.inflate(R.layout.fragment_my_quotes, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.fragment_my_quotes, container, false)
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+    override fun onActivityCreated(savedInstanceState: Bundle?)
     {
-        super.onViewCreated(view, savedInstanceState)
+        super.onActivityCreated(savedInstanceState)
 //        mutableListOf(
 //            Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote()
 //        ).let {
@@ -48,7 +47,9 @@ class FragmentMyQuotes : Fragment()
 //        }
 
         MainScope().launch {
-            val d = ProgressDialog(context!!)
+            if (!isAdded) return@launch
+
+            val d = ProgressDialog(childFragmentManager)
             d.show()
 
             val myQuotes = fetchMyQuotes()
@@ -68,14 +69,16 @@ class FragmentMyQuotes : Fragment()
         try
         {
             // non-null asserted because user doc is created after email/password signup or if first time google/fb login.
-            val user = db.document("/users/$userId").get().await().toObject<User>()!!
+//            val user = db.document("/users/$userId").get().await().toObject<User>()!!
+            val user = User.get()
 
             quotes = db.collection("quotes").whereEqualTo("user.id", userId)
-                .orderBy("votes", Query.Direction.DESCENDING).get().await().toObjects()
+                    .orderBy("votes", Query.Direction.DESCENDING).get().await().toObjects()
 
             quotes.forEach { user.setUpQuote(it) }
 
-        } catch (e: Exception)
+        }
+        catch (e: Exception)
         {
             e.printStackTrace()
             Log.e(TAG, "Error getting quotes: ${e.message}")

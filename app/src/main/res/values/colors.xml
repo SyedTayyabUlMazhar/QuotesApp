@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#C88B8B</color>
     <color name="colorAccent">#3F91DB</color>
 
+    <color name="header">#F8F8F8</color>
+
     <color name="grey">#7B7B7B</color>
     <color name="nav_item_selected">#A64343</color>
     <color name="nav_item_selected_background">#3DDF9A9A</color>
@@ -14,6 +16,11 @@
 
     <color name="item_unselected">#9D9D9D</color>
 
-    <color name="settings_username">#A64343</color>
+    <color name="username_dark">#A64343</color>
+
+    <color name="profile_pic_border">#FFF</color>
+    <color name="profile_pic_shadow">#5C5C5C</color>
+    <color name="camera_icon_border">#FFF</color>
+    <color name="camera_icon_shadow">#FF5C5C5C</color>
 
 </resources>

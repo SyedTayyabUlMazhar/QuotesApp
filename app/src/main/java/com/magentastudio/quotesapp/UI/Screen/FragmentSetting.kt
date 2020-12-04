@@ -1,4 +1,4 @@
-package com.magentastudio.quotesapp
+package com.magentastudio.quotesapp.UI.Screen
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -9,11 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
@@ -22,13 +21,14 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.R
+import com.magentastudio.quotesapp.UI.Common.ProgressDialog
+import com.magentastudio.quotesapp.UI.Common.ProgressDialogOld
+import com.magentastudio.quotesapp.UI.Common.toStorageReference
 import kotlinx.android.synthetic.main.fragment_setting.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.lang.NullPointerException
 import java.util.*
 
@@ -54,28 +54,16 @@ class FragmentSetting : Fragment()
 
         profileReference = Firebase.storage.reference.child("/profile")
         userDocRef = Firebase.firestore.document("/users/$userId")
-
-
-        username = FirebaseAuth.getInstance().currentUser!!.displayName!!
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View?
-    {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.fragment_setting, container, false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
 
-        et_username.setText(username)
-        tv_username_label.setText(username)
 
         iv_cameraIcon.setOnClickListener { openGallery() }
         iv_edit_icon.setOnClickListener {
@@ -92,18 +80,21 @@ class FragmentSetting : Fragment()
             usernameEditable(false)
         }
 
-        btn_save.setOnClickListener { confirmChanges() }
+        btn_save.setOnClickListener { saveChanges() }
 
-        loadProfilePicture()
+        loadProfilePictureNameAndEmail()
     }
 
 
-    private fun loadProfilePicture()
+    private fun loadProfilePictureNameAndEmail()
     {
         MainScope().launch {
 
             try
             {
+                val usernameDeffered = CoroutineScope(IO).async { userDocRef.get().await().toObject<User>()!!.name }
+                tv_email.setText(FirebaseAuth.getInstance().currentUser!!.email)
+
                 //fetch path form server asynchronously
                 val imagePathFromServerDeffered = async { fetchLastUploadedImagePath() }
 
@@ -111,29 +102,35 @@ class FragmentSetting : Fragment()
                 val imagePathFromCache = fetchLastUploadedImagePath(true)
                 if (!imagePathFromCache.isEmpty())
                 {
-                    val imageRef = imagePathFromCache.toStorageReference()
+                    val imageRef = Firebase.storage.reference.child(imagePathFromCache)
 
                     Glide.with(this@FragmentSetting).load(imageRef).placeholder(R.drawable.avatar)
-                        .into(iv_profilePicture)
+                            .into(iv_profilePicture)
                 }
 
-                // if path from cache is inconsistent from path on server than load image from the later
+                // if path from cache is inconsistent from path on server than load image from the server
                 val imagePathFromServer = imagePathFromServerDeffered.await()
                 if (!imagePathFromServer.contentEquals(imagePathFromCache))
                 {
-                    val imageRef = imagePathFromServer.toStorageReference()
+                    val imageRef = Firebase.storage.reference.child(imagePathFromServer)
 
                     Glide.with(this@FragmentSetting).load(imageRef).placeholder(R.drawable.avatar)
-                        .into(iv_profilePicture)
+                            .into(iv_profilePicture)
                 }
 
-            } catch (e: NullPointerException)
+
+
+                username = usernameDeffered.await()
+
+                et_username.setText(username)
+                tv_usernameBig.setText(username)
+            }
+            catch (e: NullPointerException)
             {
                 Log.e(TAG, "NPE RAISED")
                 e.printStackTrace()
             }
         }
-
     }
 
     private fun openGallery()
@@ -147,23 +144,10 @@ class FragmentSetting : Fragment()
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK)
-            ProgressDialog(context).untilCompletes {
-//                val imageUri: Uri? = data?.data
-//
-//                val newImagePath = uploadImage(imageUri) //upload new image to storage
-//                val oldImagePath =
-//                    fetchLastUploadedImagePath() // fetch the path of old image from user doc
-//
-//                updateImagePath(newImagePath)
-//
-//                deleteImage(oldImagePath)
-//
-//                val newImageRef = newImagePath.toStorageReference()
-//                Glide.with(this).load(newImageRef).into(iv_profilePicture)
-
-                imageUri = data?.data
-                Glide.with(this).load(imageUri).into(iv_profilePicture)
-            }
+        {
+            imageUri = data?.data
+            imageUri?.run { iv_profilePicture.setImageURI(this) }
+        }
     }
 
     suspend fun uploadImage(imageUri: Uri?): String = withContext(IO)
@@ -175,7 +159,8 @@ class FragmentSetting : Fragment()
         if (imageUri != null)
             imageRef.putFile(imageUri).await()
 
-        imageRef.toString()
+//        imageRef.toString()
+        newImageName
     }
 
     /**
@@ -190,9 +175,10 @@ class FragmentSetting : Fragment()
             val source = if (fromCache) Source.CACHE else Source.DEFAULT
 
             val user = userDocRef.get(source).await().toObject<User>()
-            path = user!!.profilePic
+            path = user!!.profilePicPath
 
-        } catch (e: Exception)
+        }
+        catch (e: Exception)
         {
             Log.i(TAG, "fetchCurrentImagePathLocally() failed")
             e.printStackTrace()
@@ -202,19 +188,17 @@ class FragmentSetting : Fragment()
     }
 
     suspend fun updateImagePath(path: String) = withContext(IO) {
-        userDocRef.update("profilePic", path)
+        userDocRef.update("profilePicPath", path)
     }
 
     suspend fun deleteImage(path: String) = withContext(IO)
     {
         if (path.isEmpty()) return@withContext
-        path.toStorageReference().delete()
+//        path.toStorageReference().delete()
+        Firebase.storage.reference.child(path).delete()
     }
 
-    fun String.toStorageReference(): StorageReference
-    {
-        return Firebase.storage.getReferenceFromUrl(this)
-    }
+
 
     fun usernameEditable(state: Boolean)
     {
@@ -235,30 +219,31 @@ class FragmentSetting : Fragment()
         username = et_username.text.toString()
     }
 
-
-    fun confirmChanges()
+    fun saveChanges()
     {
-        ProgressDialog(context).untilCompletes {
+        MainScope().launch()
+        {
+            if (!isAdded) return@launch
 
-            withContext(IO) {
-                val currentUser = FirebaseAuth.getInstance().currentUser!!
-                val changeRequest =
-                    UserProfileChangeRequest.Builder().setDisplayName(username).build()
-                currentUser.updateProfile(changeRequest)
-            }
+            val _d = ProgressDialog(childFragmentManager)
+            _d.show()
+
+            withContext(IO) { userDocRef.update("name", username) }
 
             withContext(IO)
             {
-
-                val newImagePath = uploadImage(imageUri) //upload new image to storage
-                val oldImagePath =
-                    fetchLastUploadedImagePath() // fetch the path of old image from user doc
+                val newImagePath = "profile/" + uploadImage(imageUri) //upload new image to storage
+                val oldImagePath = fetchLastUploadedImagePath() // fetch the path of old image from user doc
 
                 updateImagePath(newImagePath)
 
                 deleteImage(oldImagePath)
+
+                _d.dimiss()
             }
         }
+
+
     }
 
 }
