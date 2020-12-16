@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.IdRes
@@ -14,9 +12,10 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.ConfirmationDialog
+import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.btnNewQuote
 import kotlinx.android.synthetic.main.activity_main.drawer
@@ -78,6 +77,7 @@ class ActivityMain : AppCompatActivity()
 
     private fun logout()
     {
+        UserRepository.loggedIn(true)
         FirebaseAuth.getInstance().signOut()
 //        LoginManager.getInstance().logOut()
 //        GoogleSignIn.getClient(applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut()
@@ -110,8 +110,8 @@ class ActivityMain : AppCompatActivity()
         }
 
         supportFragmentManager.beginTransaction()
-                .replace(fragmentContainer.id, fragment!!)
-                .commit()
+            .replace(fragmentContainer.id, fragment!!)
+            .commit()
 
         return true
     }
@@ -135,14 +135,15 @@ class ActivityMain : AppCompatActivity()
 
         CoroutineScope(IO).launch()
         {
-            val user = User.get()
+            val user = UserData.get()
 //            val imageRef = user.profilePicReference()
             val imageRef = Firebase.storage.reference.child(user.profilePicPath)
 
             withContext(Main) {
                 navigationView.tvUserName.setText(user.name)
                 if (!this@ActivityMain.isDestroyed)
-                    Glide.with(this@ActivityMain).load(imageRef).into(navigationView.iv_profilePicture)
+                    Glide.with(this@ActivityMain).load(imageRef)
+                        .into(navigationView.iv_profilePicture)
             }
         }
 

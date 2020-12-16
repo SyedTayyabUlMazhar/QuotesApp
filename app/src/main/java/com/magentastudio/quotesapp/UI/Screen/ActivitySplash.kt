@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.magentastudio.quotesapp.R
+import com.magentastudio.quotesapp.UserRepository
 
 class ActivitySplash : AppCompatActivity()
 {
@@ -20,7 +21,11 @@ class ActivitySplash : AppCompatActivity()
         val intent = when (FirebaseAuth.getInstance().currentUser)
         {
             null -> Intent(this, ActivityLogin::class.java)
-            else -> Intent(this, ActivityMain::class.java)
+            else ->
+            {
+                UserRepository.loggedIn(true)
+                Intent(this, ActivityMain::class.java)
+            }
         }
 
         Handler().postDelayed({

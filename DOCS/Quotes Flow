@@ -1,0 +1,42 @@
+Refreshing:
+	- If the user presses refresh button.
+	- If the user makes changes(e.g upvoting) on one fragment(e.g home) and goes to another fragment(e.g favorites)
+	
+
+Data initialization
+	- Initialize data for all screens in init block.
+	
+How ?
+	- When initializing
+		+ loadUserData()
+			- Collect from repo stateflow, filter defaults, and take 1.
+		+ loadPlainQuotes()
+			- fetch plainQuotes once in a try catch block
+			- If there is an exception then set value to failure
+			- else set value to sucess
+		+ loadProcessedQuotes()
+			- combine userData & plainQuote
+				+ IF userdata OR plain quotes IS failure, then the result of combine is failure
+				+ ELSE IF userdata OR plain quotes is default, then the result of combine is default
+				+ ELSE(they both are SUCCESS), combine them together by setting booleans, the result of combination is SUCCESS.
+			- collect : set processedQuotes.value to whatever is in collect.
+		+ loadMyQuotes()
+			- combine userData & processedQuotes
+				+ IF userdata OR processedQuotes IS failure, then the result of combine is failure
+				+ ELSE IF userdata OR processedQuotes is default, then the result of combine is default
+				+ ELSE(they both are SUCCESS), combine them together by filtering, the result of combination is SUCCESS.
+			- collect : set myQuotes.value to whatever is in collect.
+		+ loadFavorites()
+			- combine userData & processedQuotes
+				+ IF userdata OR processedQuotes IS failure, then the result of combine is failure
+				+ ELSE IF userdata OR processedQuotes is default, then the result of combine is default
+				+ ELSE(they both are SUCCESS), combine them together by filtering, the result of combination is SUCCESS.
+			- collect : set favoriteQuotes.value to whatever is in collect.
+
+
+refresh() // Can be triggered by user explicitly or when user performs some changes on one screen and then switches to another
+	- loadUserData()
+	- loadPlainQuotes()
+
+
+			

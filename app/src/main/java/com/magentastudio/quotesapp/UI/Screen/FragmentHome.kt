@@ -6,20 +6,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
-import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.Model.UserData
+import com.magentastudio.quotesapp.QuoteViewModel
 import com.magentastudio.quotesapp.R
+import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter
+import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter1
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import com.magentastudio.quotesapp.UI.Common.showToastMainCoroutine
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
@@ -28,34 +34,67 @@ private const val TAG = "FragmentHome"
 class FragmentHome : Fragment()
 {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    val viewModel by viewModels<QuoteViewModel>()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_home, container, false)
 
+//    override fun onActivityCreated(savedInstanceState: Bundle?)
+//    {
+//        super.onActivityCreated(savedInstanceState)
+//
+//        /* PSEUDO-CODE
+//        * display progress
+//        * Get all quotes
+//        * set their boolean value
+//        * create adapter
+//        * set recyclerview adapter
+//        * dismiss progress dailog*/
+//
+//        MainScope().launch()
+//        {
+//            // getChildFragmentManager will throw exception if this fragment isn't yet attached to the activity.
+//            if (!isAdded) return@launch
+//
+//            val _d = ProgressDialog(childFragmentManager)
+//
+//            _d.show()
+//
+//            rv_quotes.adapter = QuoteAdapter(context!!, fetchQuotes())
+//
+//            _d.dimiss()
+//        }
+//    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?)
     {
         super.onActivityCreated(savedInstanceState)
 
-        /* PSEUDO-CODE
-        * display progress
-        * Get all quotes
-        * set their boolean value
-        * create adapter
-        * set recyclerview adapter
-        * dismiss progress dailog*/
 
-        MainScope().launch()
-        {
-            // getChildFragmentManager will throw exception if this fragment isn't yet attached to the activity.
-            if (!isAdded) return@launch
+        lifecycleScope.launchWhenStarted {
+            viewModel.processedQuotes.collect {
+                when (it)
+                {
+                    is Response.Loading -> shimmer.visibility = View.VISIBLE
 
-            val _d = ProgressDialog(childFragmentManager)
+                    is Response.Default -> Unit
+                    is Response.Failure ->
+                    {
+                        shimmer.visibility = View.INVISIBLE
 
-            _d.show()
+                        Toast.makeText(context, it.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    is Response.Success ->
+                    {
+                        shimmer.visibility = View.INVISIBLE
 
-            rv_quotes.adapter = QuoteAdapter(context!!, fetchQuotes())
-
-            _d.dimiss()
+                        rv_quotes.adapter =
+                            QuoteAdapter1(context!!, viewModel, it.result.toMutableList())
+                    }
+                }
+            }
         }
     }
 
@@ -76,12 +115,11 @@ class FragmentHome : Fragment()
             quotes = quotesQuery.get().await().toObjects<Quote>().toMutableList()
             // non-null asserted because user doc is created after on signup
 //            val user = db.document("/users/$userId").get().await().toObject<User>()!!
-            val user = User.get()
+            val user = UserData.get()
 
             quotes.forEach { user.setUpQuote(it) }
 
-        }
-        catch (e: Exception)
+        } catch (e: Exception)
         {
             e.printStackTrace()
             Log.e(TAG, "Error getting quotes: ${e.message}")

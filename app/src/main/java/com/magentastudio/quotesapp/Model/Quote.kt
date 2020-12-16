@@ -2,9 +2,24 @@ package com.magentastudio.quotesapp.Model
 
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class Quote
 {
+    companion object
+    {
+        const val COLLECTION = "quotes"
+
+        const val QUOTE = "quote"
+        const val AUTHOR = "author"
+        const val USER_ID = "user.id"
+        const val USER_NAME = "user.name"
+        const val USER_PROFILE_PIC_PATH = "user.profilePicPath"
+        const val VOTES = "votes"
+
+    }
+
     @DocumentId
     lateinit var docId: String
 
@@ -25,6 +40,7 @@ class Quote
 
     @get:Exclude
     var downvoted = false
+    // </not part of the doc>
 
     constructor()
     {
@@ -38,7 +54,9 @@ class Quote
         this.user = user
         this.votes = votes
     }
-    // </not part of the doc>
+
+
+    fun docRef() = Firebase.firestore.document("$COLLECTION/$docId")
 
     override fun toString(): String
     {

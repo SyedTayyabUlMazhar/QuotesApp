@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Source
@@ -20,11 +19,9 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
-import com.magentastudio.quotesapp.UI.Common.ProgressDialogOld
-import com.magentastudio.quotesapp.UI.Common.toStorageReference
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -92,7 +89,7 @@ class FragmentSetting : Fragment()
 
             try
             {
-                val usernameDeffered = CoroutineScope(IO).async { userDocRef.get().await().toObject<User>()!!.name }
+                val usernameDeffered = CoroutineScope(IO).async { userDocRef.get().await().toObject<UserData>()!!.name }
                 tv_email.setText(FirebaseAuth.getInstance().currentUser!!.email)
 
                 //fetch path form server asynchronously
@@ -174,7 +171,7 @@ class FragmentSetting : Fragment()
         {
             val source = if (fromCache) Source.CACHE else Source.DEFAULT
 
-            val user = userDocRef.get(source).await().toObject<User>()
+            val user = userDocRef.get(source).await().toObject<UserData>()
             path = user!!.profilePicPath
 
         }

@@ -16,9 +16,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
+import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.activity_sign_up.btnLogin
 import kotlinx.android.synthetic.main.activity_sign_up.btnSignUp
@@ -34,7 +35,7 @@ import java.util.*
 
 
 class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
-        OnFailureListener
+    OnFailureListener
 {
     private val TAG = "ActivitySignUp"
     private val KEY_URI = "URI"
@@ -132,48 +133,43 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             if (email.isEmpty() || password.isEmpty())
             {
                 Snackbar.make(
-                        btnLogin.rootView,
-                        "Please, enter email and password",
-                        Snackbar.LENGTH_LONG
+                    btnLogin.rootView,
+                    "Please, enter email and password",
+                    Snackbar.LENGTH_LONG
                 ).show()
 
                 return false
-            }
-            else if (!password.contentEquals(confirmPassword))
+            } else if (!password.contentEquals(confirmPassword))
             {
                 Snackbar.make(
-                        btnLogin.rootView,
-                        "Passwords do not match.",
-                        Snackbar.LENGTH_LONG
+                    btnLogin.rootView,
+                    "Passwords do not match.",
+                    Snackbar.LENGTH_LONG
                 ).show()
 
                 return false
-            }
-            else if (name.length < 6)
+            } else if (name.length < 6)
             {
                 Snackbar.make(
-                        btnLogin.rootView,
-                        "Name must be atleast 6 characters long",
-                        Snackbar.LENGTH_LONG
+                    btnLogin.rootView,
+                    "Name must be atleast 6 characters long",
+                    Snackbar.LENGTH_LONG
                 ).show()
 
                 return false
-            }
-            else return true
-        }
-        else
+            } else return true
+        } else
         {
             if (name.length < 6)
             {
                 Snackbar.make(
-                        btnLogin.rootView,
-                        "Name must be atleast 6 characters long",
-                        Snackbar.LENGTH_LONG
+                    btnLogin.rootView,
+                    "Name must be atleast 6 characters long",
+                    Snackbar.LENGTH_LONG
                 ).show()
 
                 return false
-            }
-            else return true
+            } else return true
         }
     }
 
@@ -185,7 +181,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
         val password = etPassword.text.toString()
 
         auth.createUserWithEmailAndPassword(email, password)
-                .addOnSuccessListener(this).addOnFailureListener(this)
+            .addOnSuccessListener(this).addOnFailureListener(this)
     }
 
     fun fbSignUp()
@@ -194,7 +190,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
 
         val credential = FacebookAuthProvider.getCredential(token!!)
         auth.signInWithCredential(credential)
-                .addOnSuccessListener(this).addOnFailureListener(this)
+            .addOnSuccessListener(this).addOnFailureListener(this)
     }
 
     fun googleSignUp()
@@ -204,7 +200,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
         val credential = GoogleAuthProvider.getCredential(token, null)
 
         auth.signInWithCredential(credential)
-                .addOnSuccessListener(this).addOnFailureListener(this)
+            .addOnSuccessListener(this).addOnFailureListener(this)
     }
 
 
@@ -242,6 +238,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             uploadProfilePicAndName(user.uid)
 
             _d.dismiss()
+            UserRepository.loggedIn(true)
             navigateToHome()
         }
 //        ProgressDialogOld(this).untilCompletes {
@@ -262,7 +259,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
 
     suspend fun uploadProfilePicAndName(userId: String)
     {
-        val user = User()
+        val user = UserData()
         user.name = et_userName.text.toString()
 
         withContext(Dispatchers.IO)
@@ -273,7 +270,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             user.profilePicPath = newImagePath
 
             Firebase.firestore.document("/users/$userId")
-                    .set(user).await()
+                .set(user).await()
         }
     }
 
@@ -295,7 +292,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     {
 //        Log.i(TAG, "Signed In:  Yes,  email: " + email + " profile: " + photoUrl)
         startActivity(
-                Intent(this, ActivityMain::class.java)
+            Intent(this, ActivityMain::class.java)
         )
     }
 }

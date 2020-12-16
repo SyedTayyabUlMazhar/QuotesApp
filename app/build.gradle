@@ -68,5 +68,8 @@ dependencies {
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    implementation 'androidx.fragment:fragment-ktx:1.1.0'
 }
 

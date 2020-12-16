@@ -1,0 +1,53 @@
+onScreenRotation
+	save state:
+		put imageUri in bundle
+		put name in bundle
+		put email in bundle
+		put newImageSelected in bundle
+		put nameChanged in bundle
+
+	retain state:
+		load imageUri from bundle
+		load name from bundle
+		load email from bundle
+		load newImageSelected from bundle
+		load nameChanged from bundle
+
+
+if name is null
+	load it from firebase
+	save it locally
+else
+	load it from local variable
+
+if email is null
+	load it from firebase
+	save it locally
+else
+	load it from local variable
+
+if imageUri is null
+	load it from firebase
+else
+	load it from local variable
+
+User selects a new image, newImageSelected to true
+user changes name and confirms, nameChanged to true
+
+saveChanges:
+	If nameChanged true
+		update name in db
+		nameChanged=false
+
+	IF newImageSelected true
+		update image in db
+		newImageSelected = false
+
+
+
+
+
+
+	
+
+

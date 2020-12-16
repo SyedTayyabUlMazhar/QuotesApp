@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
-import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import kotlinx.android.synthetic.main.activity_new_quote.*
@@ -60,7 +60,7 @@ class ActivityNewQuote : AppCompatActivity()
         {
             val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
-            val user = User.get()
+            val user = UserData.get()
 
             userMap.apply()
             {

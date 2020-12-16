@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:shimmer_shape="linear"
+    app:shimmer_base_alpha="0.9"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="309dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="15dp"
+            android:background="@drawable/quote_box_background"
+            android:elevation="6dp"
+            android:paddingBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="profile picture"
+                android:src="@drawable/ic_curved_rectangle"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--        <ImageView-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:contentDescription="profile picture"-->
+            <!--            android:src="@drawable/ic_quote_box_name_background"-->
+            <!--            app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--            app:layout_constraintRight_toRightOf="parent"-->
+            <!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/iv_profilePicture"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/shimmer_circle"
+                app:civ_circle_color="@android:color/white"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/tv_username"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:background="@android:color/white"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#9D9D9D"
+                android:textSize="14dp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_profilePicture"
+                app:layout_constraintLeft_toRightOf="@id/iv_profilePicture"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_profilePicture" />
+
+            <TextView
+                android:id="@+id/tv_quote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="60dp"
+                android:fontFamily="@font/dancing_script_variable_font_weight"
+                android:gravity="center_horizontal"
+                android:lineSpacingMultiplier="1.2"
+                android:text="The greatest glory in living lies not in never falling, but in rising every time we fall."
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/tv_quote_1"
+                android:layout_width="0dp"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="68dp"
+                android:background="#f2f2f2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/tv_quote_2"
+                android:layout_width="0dp"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:background="#f2f2f2"
+
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_quote_1" />
+
+            <LinearLayout
+                android:id="@+id/tv_quote_3"
+                android:layout_width="0dp"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:background="#f2f2f2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_quote_2" />
+
+            <LinearLayout
+                android:id="@+id/tv_quote_4"
+                android:layout_width="64dp"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:background="#f2f2f2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_quote_3" />
+
+
+            <LinearLayout
+                android:id="@+id/tv_author"
+                android:layout_width="90dp"
+                android:layout_height="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="10dp"
+                android:background="#f2f2f2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_quote_4" />
+
+            <!--        <LinearLayout-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="24dp"-->
+            <!--            android:layout_marginHorizontal="16dp"-->
+            <!--            android:layout_marginTop="8dp"-->
+            <!--            android:background="#f2f2f2"-->
+            <!--            android:visibility="invisible"-->
+            <!--            android:orientation="horizontal"-->
+            <!--            app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--            app:layout_constraintRight_toRightOf="parent"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/tv_author" />-->
+
+            <ImageView
+                android:id="@+id/upvote_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical"
+                android:src="@drawable/ic_upvote"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/upvote_count"
+                app:layout_constraintTop_toBottomOf="@id/tv_author"
+                app:tint="#f2f2f2" />
+
+            <LinearLayout
+                android:id="@+id/upvote_count"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:background="#f2f2f2"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toRightOf="@id/upvote_icon"
+                app:layout_constraintRight_toLeftOf="@id/downvote_icon"
+                app:layout_constraintTop_toBottomOf="@id/tv_author" />
+
+            <ImageView
+                android:id="@+id/downvote_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_downvote"
+                app:layout_constraintLeft_toRightOf="@id/upvote_count"
+                app:layout_constraintRight_toLeftOf="@id/heart_icon"
+                app:layout_constraintTop_toBottomOf="@id/tv_author"
+                app:tint="#f2f2f2" />
+
+
+            <ImageView
+                android:id="@+id/heart_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_favorite"
+                app:layout_constraintLeft_toRightOf="@id/downvote_icon"
+                app:layout_constraintRight_toLeftOf="@id/share_icon"
+                app:layout_constraintTop_toBottomOf="@id/tv_author"
+                app:tint="#f2f2f2" />
+
+
+            <ImageView
+                android:id="@+id/share_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_share"
+                app:layout_constraintLeft_toRightOf="@id/heart_icon"
+                app:layout_constraintRight_toLeftOf="@id/delete_icon"
+                app:layout_constraintTop_toBottomOf="@id/tv_author"
+                app:tint="#f2f2f2" />
+
+            <ImageView
+                android:id="@+id/delete_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintBottom_toBottomOf="@id/upvote_icon"
+                app:layout_constraintLeft_toRightOf="@id/share_icon"
+                app:layout_constraintRight_toRightOf="parent"
+                app:tint="#f2f2f2" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>

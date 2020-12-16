@@ -10,13 +10,11 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
-import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
-import com.magentastudio.quotesapp.UI.Common.ProgressDialogOld
 import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import kotlinx.android.synthetic.main.fragment_my_quotes.*
@@ -70,7 +68,7 @@ class FragmentMyQuotes : Fragment()
         {
             // non-null asserted because user doc is created after email/password signup or if first time google/fb login.
 //            val user = db.document("/users/$userId").get().await().toObject<User>()!!
-            val user = User.get()
+            val user = UserData.get()
 
             quotes = db.collection("quotes").whereEqualTo("user.id", userId)
                     .orderBy("votes", Query.Direction.DESCENDING).get().await().toObjects()

@@ -27,6 +27,7 @@ import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.SIGN_UP_ME
 import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.TOKEN
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
+import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.MainScope
@@ -39,7 +40,8 @@ import kotlinx.coroutines.withContext
 class ActivityLogin : AppCompatActivity()
 {
     private val TAG = "ActivityLogin"
-    private val SIGN_IN_FAILED_MESSAGE = "Authentication Failed. Ensure that you've entered correct email, password and your internet is working properly"
+    private val SIGN_IN_FAILED_MESSAGE =
+        "Authentication Failed. Ensure that you've entered correct email, password and your internet is working properly"
 
     private lateinit var auth: FirebaseAuth
 
@@ -62,7 +64,8 @@ class ActivityLogin : AppCompatActivity()
         mGoogleSignInClient = googleSignInClient()
 
         callbackManager = CallbackManager.Factory.create()
-        LoginManager.getInstance().registerCallback(callbackManager, facebookLoginCompleteCallback())
+        LoginManager.getInstance()
+            .registerCallback(callbackManager, facebookLoginCompleteCallback())
 
         initiateButtonClickListeners()
     }
@@ -78,8 +81,9 @@ class ActivityLogin : AppCompatActivity()
     fun navigateToHome()
     {
 //        Log.i(TAG, "Signed In:  Yes,  email: " + email + " profile: " + photoUrl)
+        UserRepository.loggedIn(true)
         startActivity(
-                Intent(this@ActivityLogin, ActivityMain::class.java)
+            Intent(this@ActivityLogin, ActivityMain::class.java)
         )
     }
 
@@ -101,42 +105,21 @@ class ActivityLogin : AppCompatActivity()
             return
         }
 
-//        _d.show()
-//
-//        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-//            if (task.isSuccessful)
-//            {
-//                Log.d(TAG, "Signin Task Successful")
-//                navigateToHome()
-//            }
-//            else
-//            {
-//                Log.d(TAG, "Signin Task failed")
-//
-//                Snackbar.make(btnLogin, SIGN_IN_FAILED_MESSAGE, Snackbar.LENGTH_INDEFINITE).show()
-//                Log.e(TAG, "signIn:failed " + task.exception)
-//            }
-//
-//            _d.dimiss()
-//        }
 
-        MainScope().launch  {
+        MainScope().launch {
             _d.show()
             try
             {
                 auth.signInWithEmailAndPassword(email, password).await()
                 Log.d(TAG, "Signin Task Successful")
-                navigateToHome()
-            }
-            catch (e: Exception)
+                loginSuccess()
+            } catch (e: Exception)
             {
                 Snackbar.make(btnLogin, SIGN_IN_FAILED_MESSAGE, Snackbar.LENGTH_LONG).show()
                 Log.e(TAG, "signIn:failed " + e)
             }
             _d.dimiss()
         }
-
-
     }
 
 
@@ -144,9 +127,9 @@ class ActivityLogin : AppCompatActivity()
     fun googleSignInClient(): GoogleSignInClient
     {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
         return GoogleSignIn.getClient(this, gso)
     }
 
@@ -161,30 +144,29 @@ class ActivityLogin : AppCompatActivity()
         val credential = GoogleAuthProvider.getCredential(token, null)
 
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful)
-                    {
-                        mGoogleSignInClient.signOut()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful)
+                {
+                    mGoogleSignInClient.signOut()
 
-                        val user = auth.currentUser!!
+                    val user = auth.currentUser!!
 
-                        MainScope().launch {
-                            if (doesUserDocExist(user.uid))
-                                navigateToHome()
-                            else
-                            {
-                                FirebaseAuth.getInstance().signOut()
-                                startSignUpActivity(SIGN_UP_METHOD_GOOGLE, token)
-                            }
+                    MainScope().launch {
+                        if (doesUserDocExist(user.uid))
+                            loginSuccess()
+                        else
+                        {
+                            FirebaseAuth.getInstance().signOut()
+                            startSignUpActivity(SIGN_UP_METHOD_GOOGLE, token)
                         }
                     }
-                    else
-                    {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.exception)
-                        Snackbar.make(btnLogin, "Signin Failed", Snackbar.LENGTH_LONG).show()
-                    }
+                } else
+                {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Snackbar.make(btnLogin, "Signin Failed", Snackbar.LENGTH_LONG).show()
                 }
+            }
     }
 
 
@@ -231,15 +213,14 @@ class ActivityLogin : AppCompatActivity()
 
                 MainScope().launch {
                     if (doesUserDocExist(user.uid))
-                        navigateToHome()
+                        loginSuccess()
                     else
                     {
                         FirebaseAuth.getInstance().signOut()
                         startSignUpActivity(SIGN_UP_METHOD_FB, token)
                     }
                 }
-            }
-            else
+            } else
             {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithCredential:failure", task.exception)
@@ -248,6 +229,12 @@ class ActivityLogin : AppCompatActivity()
         }
     }
 
+
+    private fun loginSuccess()
+    {
+        UserRepository.loggedIn(true)
+        navigateToHome()
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
@@ -265,8 +252,7 @@ class ActivityLogin : AppCompatActivity()
             {
                 val account = googleSignInAccountTask.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!) // idToken wont be null because we configured request id token. see documentation for getIdToken.
-            }
-            catch (e: ApiException)
+            } catch (e: ApiException)
             {
                 Log.w(TAG, "Google sign in failed", e)
             }
@@ -277,7 +263,7 @@ class ActivityLogin : AppCompatActivity()
     fun hideKeyboard(activity: Activity)
     {
         val imm: InputMethodManager =
-                activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         //Find the currently focused view, so we can grab the correct window token from it.
         var view: View? = activity.currentFocus
         //If no view currently has focus, create a new one, just so we can grab a window token from it
@@ -305,5 +291,6 @@ class ActivityLogin : AppCompatActivity()
         startActivity(intent)
         finish()
     }
+
 
 }

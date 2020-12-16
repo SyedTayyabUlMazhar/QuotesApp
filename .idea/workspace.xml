@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config>
+        <device id="pixel_2" />
+        <device id="pixel_c" />
+        <device id="pixel_2_xl" />
+      </config>
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="QuoteViewModel" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="info" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2d974879-5899-47c6-9fa4-b73154329eb6" name="Default Changelist" comment="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated.">
+      <change afterPath="$PROJECT_DIR$/.idea/modules/app/app.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DOCS/Modifyying retrived quotes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DOCS/Profile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DOCS/Quotes Flow" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/BaseRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/QuoteRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/QuoteViewModel.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Response.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Adapter/QuoteAdapter1.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/NewQuoteFragment.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UserRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/shimmer_circle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/shimmer_quote_box.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/Quote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/Quote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/UserData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/UserData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityLogin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityLogin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityMain.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityMain.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityNewQuote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityNewQuote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivitySignUp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivitySignUp.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivitySplash.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivitySplash.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentFavorites.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentFavorites.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentHome.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentHome.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentMyQuotes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentMyQuotes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentSetting.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentSetting.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[420092a79b017200]" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="resourceFile" />
+        <option value="layoutResourceFile" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="MVVM" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
+  </component>
+  <component name="ProjectId" id="1iJtqBprTUlAExuwa4bxgnW9Xvu" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Pixel_C_API_29" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-10-29T14:58:52.707Z" />
+    <property name="ResourceManagerPrefKey.ResourceType" value="DRAWABLE" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../AndroidNew/Demos/ShimmerRecycler" />
+    <property name="project.structure.last.edited" value="SDK Location" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+    <key name="android.template.1577387448">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+    <key name="android.template.-1356609437">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+    <key name="android.template.1224627783">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+    <key name="android.template.-1371961686">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+    <key name="android.template.2110071588">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/font" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable-xxxhdpi" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/menu" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/mipmap-xxxhdpi" />
+    </key>
+    <key name="android.template.301441762">
+      <recent name="com.magentastudio.quotesapp" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="QuotesApp.app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2d974879-5899-47c6-9fa4-b73154329eb6" name="Default Changelist" comment="" />
+      <created>1601637710451</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1601637710451</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." />
+    <option name="LAST_COMMIT_MESSAGE" value="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="469" y="84" width="419" height="561" key="#com.intellij.ide.util.MemberChooser" timestamp="1604044541198">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="469" y="84" width="419" height="561" key="#com.intellij.ide.util.MemberChooser/0.0.1366.729@0.0.1366.729" timestamp="1604044541198" />
+    <state x="360" y="0" width="638" height="728" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1603005090627">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="360" y="0" width="638" height="728" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1366.729@0.0.1366.729" timestamp="1603005090627" />
+    <state x="461" y="15" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1602225816340">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="461" y="15" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.1366.729@0.0.1366.729" timestamp="1602225816340" />
+    <state x="266" y="123" width="826" height="483" key="AndroidCreateResourceDirectoryDialog" timestamp="1602436879463">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="266" y="123" width="826" height="483" key="AndroidCreateResourceDirectoryDialog/0.0.1366.729@0.0.1366.729" timestamp="1602436879463" />
+    <state x="273" y="170" width="826" height="483" key="AndroidCreateResourceFileDialog" timestamp="1603002819840">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="273" y="170" width="826" height="483" key="AndroidCreateResourceFileDialog/0.0.1366.729@0.0.1366.729" timestamp="1603002819840" />
+    <state x="538" y="180" width="281" height="369" key="AndroidCreateXmlResourceDialog" timestamp="1603003068540">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="538" y="180" width="281" height="369" key="AndroidCreateXmlResourceDialog/0.0.1366.729@0.0.1366.729" timestamp="1603003068540" />
+    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2" timestamp="1608135645303">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2/0.0.1366.729@0.0.1366.729" timestamp="1608135645303" />
+    <state x="366" y="123" width="626" height="483" key="Downloadable.Font.Dialog.Size" timestamp="1601888813050">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="366" y="123" width="626" height="483" key="Downloadable.Font.Dialog.Size/0.0.1366.729@0.0.1366.729" timestamp="1601888813050" />
+    <state x="462" y="122" width="426" height="483" key="FileChooserDialogImpl" timestamp="1608125894534">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="462" y="122" width="426" height="483" key="FileChooserDialogImpl/0.0.1366.729@0.0.1366.729" timestamp="1608125894534" />
+    <state x="267" y="6" width="822" height="716" key="GradleDaemons" timestamp="1602056998515">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="267" y="6" width="822" height="716" key="GradleDaemons/0.0.1366.729@0.0.1366.729" timestamp="1602056998515" />
+    <state width="1320" height="177" key="GridCell.Tab.0.bottom" timestamp="1608135668123">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state width="1320" height="177" key="GridCell.Tab.0.bottom/0.0.1366.729@0.0.1366.729" timestamp="1608135668123" />
+    <state width="1320" height="177" key="GridCell.Tab.0.center" timestamp="1608135668122">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state width="1320" height="177" key="GridCell.Tab.0.center/0.0.1366.729@0.0.1366.729" timestamp="1608135668122" />
+    <state width="1320" height="177" key="GridCell.Tab.0.left" timestamp="1608135668122">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state width="1320" height="177" key="GridCell.Tab.0.left/0.0.1366.729@0.0.1366.729" timestamp="1608135668121" />
+    <state width="1320" height="177" key="GridCell.Tab.0.right" timestamp="1608135668123">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state width="1320" height="177" key="GridCell.Tab.0.right/0.0.1366.729@0.0.1366.729" timestamp="1608135668123" />
+    <state x="394" y="81" width="569" height="567" key="MultipleFileMergeDialog" timestamp="1604063676074">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="394" y="81" width="569" height="567" key="MultipleFileMergeDialog/0.0.1366.729@0.0.1366.729" timestamp="1604063676074" />
+    <state x="179" y="0" key="SettingsEditor" timestamp="1608122507222">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="179" y="0" key="SettingsEditor/0.0.1366.729@0.0.1366.729" timestamp="1608122507222" />
+    <state x="480" y="145" width="398" height="439" key="chooseDestDirectoryDialog" timestamp="1603003250452">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="480" y="145" width="398" height="439" key="chooseDestDirectoryDialog/0.0.1366.729@0.0.1366.729" timestamp="1603003250452" />
+    <state x="99" y="100" width="1168" height="530" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1603265018914">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="99" y="100" width="1168" height="530" key="com.android.tools.idea.avdmanager.AvdListDialog/0.0.1366.729@0.0.1366.729" timestamp="1603265018914" />
+    <state x="99" y="100" width="1168" height="530" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1604064113027">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="99" y="100" width="1168" height="530" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.0.1366.729@0.0.1366.729" timestamp="1604064113027" />
+    <state x="362" y="192" key="com.intellij.ide.util.TipDialog" timestamp="1602479451872">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="362" y="192" key="com.intellij.ide.util.TipDialog/0.0.1366.729@0.0.1366.729" timestamp="1602479451872" />
+    <state x="469" y="285" width="427" height="160" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604064120950">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="469" y="285" width="427" height="160" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.729@0.0.1366.729" timestamp="1604064120950" />
+    <state x="108" y="142" width="1322" height="686" key="dock-window-1" timestamp="1602344511033">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="108" y="142" width="1322" height="686" key="dock-window-1/0.0.1366.729@0.0.1366.729" timestamp="1602344511033" />
+    <state x="346" y="160" width="672" height="677" key="run.anything.popup" timestamp="1604064280043">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="346" y="160" width="672" height="677" key="run.anything.popup/0.0.1366.729@0.0.1366.729" timestamp="1604064280043" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1608134588114">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.729@0.0.1366.729" timestamp="1608134588114" />
+  </component>
+</project>

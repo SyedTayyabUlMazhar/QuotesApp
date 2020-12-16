@@ -6,96 +6,65 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.auth.FirebaseAuth
+import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.magentastudio.quotesapp.Model.Quote
-import com.magentastudio.quotesapp.Model.User
+import com.magentastudio.quotesapp.Model.UserData
+import com.magentastudio.quotesapp.QuoteViewModel
 import com.magentastudio.quotesapp.R
-import com.magentastudio.quotesapp.UI.Common.ProgressDialogOld
+import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter
+import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter1
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import com.magentastudio.quotesapp.UI.Common.showToastMainCoroutine
 import kotlinx.android.synthetic.main.fragment_favorites.*
+import kotlinx.android.synthetic.main.fragment_favorites.rv_quotes
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
 class FragmentFavorites : Fragment()
 {
 
+    private val viewModel by viewModels<QuoteViewModel>()
+
     val TAG = "FragmentFavorites"
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_favorites, container, false)
-
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?)
     {
         super.onActivityCreated(savedInstanceState)
-//         listOf(
-//            Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote(), Quote()
-//        ).let {
-//            rv_quotes.adapter = QuoteAdapter(context!!, it, dummy = true)
-//        }
 
-        MainScope().launch {
+//        shimmer.visibility = View.VISIBLE
 
-            if (!isAdded) return@launch
-
-            val d = ProgressDialog(childFragmentManager)
-            d.show()
-
-            val favorites = fetchFavoriteQuotes()
-            rv_quotes.adapter = QuoteAdapter(context!!, favorites, showOnlyFavorites = true)
-
-            d.dismiss()
-        }
-    }
-
-    suspend fun fetchFavoriteQuotes(): MutableList<Quote> = withContext(IO) {
-        val db = Firebase.firestore
-//        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-
-
-        val favoriteQuotes = mutableListOf<Deferred<Quote>>()
-
-        try
-        {
-//            val userDocRef = db.document("/users/$userId")
-            // non-null asserted because user doc is created after email/password signup or if first time google/fb login.
-//            val user = userDocRef.get().await().toObject<User>()!!
-            val user = User.get()
-
-            user.favorites.forEachIndexed()
-            { index, id ->
-                //adding quotes as deferred because if you add favoriteQutoes inside the async then it can collide with other asyncs and values can get overwritten
-                favoriteQuotes += async()
+        lifecycleScope.launchWhenStarted {
+            viewModel.favoriteQuotes.collect {
+                when (it)
                 {
-                    val quote = db.document("/quotes/$id").get().await().toObject<Quote>()!!
-                    user.setUpQuote(quote)
+                    is Response.Default -> Unit
+                    is Response.Failure -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT)
+                        .show()
+                    is Response.Success ->
+                    {
+//                        shimmer.visibility = View.GONE
 
-                    quote
+                        rv_quotes.adapter =
+                            QuoteAdapter1(context!!, viewModel, it.result, showOnlyFavorites = true)
+                    }
                 }
             }
         }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
-            Log.e(TAG, "Error getting quotes: ${e.message}")
-            context?.showToastMainCoroutine("Oops, couldn't get the quotes.")
-        }
-
-        Log.i(
-                TAG,
-                "--------------RETURNING---------------- favoriteQuotes.size: ${favoriteQuotes.size}"
-        )
-
-        favoriteQuotes.awaitAll().toMutableList()
     }
 }
 

@@ -1,0 +1,40 @@
+---------Modifyying retrived quotes---------------
+
+- Processed quotes are used to show in home.
+- They are also used to create two filtered lists for favorite quotes, and my quotes
+- The filtered lists don't copy the objects from the original(processedQuotes) list, rather they just copy the reference of the object. meaning that if quote1 is added  to favorites from processed quotes, then quote1 in both lists point to the same object
+- this means that modifying an object in one list will also affect other lists.
+
+
+							----------------------------------------------
+actual data in memory ->  	|____|____|____|____|____|____|____|____|____| 
+
+							   ^	^	 ^	  ^    ^	^	 ^	  ^	   ^
+							   |	|	 | 	  |	   |	|	 |	  |	   |
+							----------------------------------------------
+		processedQuotes ->  |____|____|____|____|____|____|____|____|____| 		references to actual data
+
+					  		  ^			^						  ^	   ^
+							  |		    |						  |    |
+							------	  ------					-----------
+				myQuote	->  |____|	  |____|					|____|____| 	references to actual data copied from processedQuotes
+
+
+
+if we modify the of one item in a list, it will be reflected in other lists also.
+
+
+
+Quote Upvoting/Downvoting:
+	- Quotes are added into favorites/myquotes lists based on votes.
+	- If one list contains reference to quote1 and you modify object's upvote/downvote/votecocunt value then this modification will be refelected in other lists containing references to quote1.
+	- We dont have to explicitly do anything to reflect the changes in UI of other screens, when the votes are modified on any screen.
+
+Quote favoriting/un-favoriting:
+	- When the favorite icon is toggled, the docId of the quote is added/removed to/from the arraylist in user's document.
+	- Un-favoriting in Favorite Screen:
+		+ If user un-favorites a quote in this screen, then the quote will be removed from favorite quote list, consequently it wont be shown in this screen. So we dont have to do anything for this case.
+	- Favoriting/Unvaoriting in MyQuotes & Home screen.
+		+ Favoriting/Unvaoriting in these two screens will not automatically add/remove the quote to/from the favoriteQuote list. If you favorite quote1 in home/myquote screen. It wont be shown when you go back to favorite screen, because the favoriteQuote list contains only favorite quotes, and they were added when we first initialized the data
+		+ In this case we will have to explicitly add/remove the quote from the favoriteQuote list when a quote is favorited/un-favorited.
+
