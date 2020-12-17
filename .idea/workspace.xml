@@ -39,35 +39,15 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d974879-5899-47c6-9fa4-b73154329eb6" name="Default Changelist" comment="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated.">
-      <change afterPath="$PROJECT_DIR$/.idea/modules/app/app.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DOCS/Modifyying retrived quotes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DOCS/Profile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DOCS/Quotes Flow" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/BaseRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/QuoteRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/QuoteViewModel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Response.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Adapter/QuoteAdapter1.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/NewQuoteFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UserRepository.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/shimmer_circle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/shimmer_quote_box.xml" afterDir="false" />
+    <list default="true" id="2d974879-5899-47c6-9fa4-b73154329eb6" name="Default Changelist" comment="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." />
+    <list id="566855fd-6bf5-43d4-a007-ac10573a59fc" name="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." comment="">
+      <change afterPath="$PROJECT_DIR$/DOCS/START" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/Quote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/Quote.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/UserData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/UserData.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityLogin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityLogin.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityMain.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityMain.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityNewQuote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityNewQuote.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivitySignUp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivitySignUp.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivitySplash.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivitySplash.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentFavorites.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentFavorites.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentHome.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentHome.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentMyQuotes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentMyQuotes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentSetting.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentSetting.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_home.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,11 +219,20 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="2d974879-5899-47c6-9fa4-b73154329eb6" name="Default Changelist" comment="" />
+      <changelist id="566855fd-6bf5-43d4-a007-ac10573a59fc" name="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." comment="" />
       <created>1601637710451</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1601637710451</updated>
     </task>
+    <task id="LOCAL-00001" summary="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated.">
+      <created>1608193253432</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1608193253433</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -299,10 +288,10 @@
       <screen x="0" y="0" width="1366" height="729" />
     </state>
     <state x="538" y="180" width="281" height="369" key="AndroidCreateXmlResourceDialog/0.0.1366.729@0.0.1366.729" timestamp="1603003068540" />
-    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2" timestamp="1608135645303">
+    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2" timestamp="1608193374113">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2/0.0.1366.729@0.0.1366.729" timestamp="1608135645303" />
+    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2/0.0.1366.729@0.0.1366.729" timestamp="1608193374113" />
     <state x="366" y="123" width="626" height="483" key="Downloadable.Font.Dialog.Size" timestamp="1601888813050">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
@@ -338,7 +327,15 @@
     <state x="179" y="0" key="SettingsEditor" timestamp="1608122507222">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state x="179" y="0" key="SettingsEditor/0.0.1366.729@0.0.1366.729" timestamp="1608122507222" />
+    <state x="179" y="0" key="SettingsEditor/0.0.1366.729@0.0.1366.729" timestamp="1608188470722" />
+    <state x="530" y="280" width="297" height="168" key="VCS.ChangelistChooser" timestamp="1608193337712">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="530" y="280" width="297" height="168" key="VCS.ChangelistChooser/0.0.1366.729@0.0.1366.729" timestamp="1608193337712" />
+    <state x="278" y="101" width="802" height="527" key="Vcs.Push.Dialog.v2" timestamp="1608193262217">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="278" y="101" width="802" height="527" key="Vcs.Push.Dialog.v2/0.0.1366.729@0.0.1366.729" timestamp="1608193262217" />
     <state x="480" y="145" width="398" height="439" key="chooseDestDirectoryDialog" timestamp="1603003250452">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
