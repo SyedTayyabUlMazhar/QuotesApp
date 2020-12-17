@@ -35,25 +35,35 @@ class ActivityMain : AppCompatActivity()
     private val TAG = "ActivityMain"
 
     private val KEY_SELECTED_ITEM_ID = "KEY_SELECTED_ITEM_ID"
-    private var initiallySelectedItemId = R.id.home
+    private var selectedItemId = 0
+
+    private val KEY_CURRENT_FRAGMENT = "CURRENT_FRAGMENT"
+    private lateinit var currentFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
 
         toolbar.setNavigationOnClickListener { drawer.openDrawer(Gravity.LEFT) }
 
         loadProfilePictureAndName()
-        navigationView.setNavigationItemSelectedListener { selectedItem(it.itemId) }
 
-        if (savedInstanceState != null)
-            initiallySelectedItemId = savedInstanceState.getInt(KEY_SELECTED_ITEM_ID)
+        navigationView.setNavigationItemSelectedListener { selectItem(it.itemId, null) }
 
 
-        navigationView.setCheckedItem(initiallySelectedItemId) //home screen is shown first
-        selectedItem(initiallySelectedItemId)
+        if (savedInstanceState == null)
+        {
+            selectItem(R.id.home, null)
+            navigationView.setCheckedItem(R.id.home)
+        }
+        else savedInstanceState.run {
+            val previouslySelectedItemId = getInt(KEY_SELECTED_ITEM_ID)
+            val previouslyCommittedFragment =
+                    supportFragmentManager.getFragment(this, KEY_CURRENT_FRAGMENT)
+
+            selectItem(previouslySelectedItemId, previouslyCommittedFragment)
+        }
 
         ConfirmationDialog(this, "Are you sure you want to logout?").apply {
             dialogButtonClickListener = object : ConfirmationDialog.DialogButtonClickListener
@@ -72,7 +82,8 @@ class ActivityMain : AppCompatActivity()
     override fun onSaveInstanceState(outState: Bundle)
     {
         super.onSaveInstanceState(outState)
-        outState.putInt(KEY_SELECTED_ITEM_ID, initiallySelectedItemId)
+        supportFragmentManager.putFragment(outState, KEY_CURRENT_FRAGMENT, currentFragment)
+        outState.putInt(KEY_SELECTED_ITEM_ID, selectedItemId)
     }
 
     private fun logout()
@@ -83,13 +94,13 @@ class ActivityMain : AppCompatActivity()
 //        GoogleSignIn.getClient(applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut()
     }
 
-    fun selectedItem(@IdRes id: Int): Boolean
+    fun selectItem(@IdRes id: Int): Boolean
     {
         toolbar.title = navigationView.menu.findItem(id).title
         drawer.closeDrawer(Gravity.LEFT)
         btnNewQuote.visibility = View.GONE
 
-        initiallySelectedItemId = id
+        selectedItemId = id
 
         var fragment: Fragment? = null
         when (id)
@@ -110,8 +121,43 @@ class ActivityMain : AppCompatActivity()
         }
 
         supportFragmentManager.beginTransaction()
-            .replace(fragmentContainer.id, fragment!!)
-            .commit()
+                .replace(fragmentContainer.id, fragment!!)
+                .commit()
+
+        return true
+    }
+
+    fun selectItem(@IdRes id: Int, fragment: Fragment?): Boolean
+    {
+        drawer.closeDrawer(Gravity.LEFT)
+
+        if (selectedItemId == id) return false
+
+        toolbar.title = navigationView.menu.findItem(id).title
+        btnNewQuote.visibility = View.GONE
+
+        selectedItemId = id
+
+        when (id)
+        {
+            R.id.home ->
+            {
+                currentFragment = fragment ?: FragmentHome()
+
+                btnNewQuote.visibility = View.VISIBLE
+                btnNewQuote.setOnClickListener()
+                {
+                    startActivity(Intent(this, ActivityNewQuote::class.java))
+                }
+            }
+            R.id.favorites -> currentFragment = fragment ?: FragmentFavorites()
+            R.id.myQuotes -> currentFragment = fragment ?: FragmentMyQuotes()
+            R.id.setting -> currentFragment = fragment ?: FragmentSetting()
+        }
+
+        supportFragmentManager.beginTransaction()
+                .replace(fragmentContainer.id, currentFragment)
+                .commit()
 
         return true
     }
@@ -143,7 +189,7 @@ class ActivityMain : AppCompatActivity()
                 navigationView.tvUserName.setText(user.name)
                 if (!this@ActivityMain.isDestroyed)
                     Glide.with(this@ActivityMain).load(imageRef)
-                        .into(navigationView.iv_profilePicture)
+                            .into(navigationView.iv_profilePicture)
             }
         }
 

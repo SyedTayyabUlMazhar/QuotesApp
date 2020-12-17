@@ -36,5 +36,57 @@ Quote favoriting/un-favoriting:
 		+ If user un-favorites a quote in this screen, then the quote will be removed from favorite quote list, consequently it wont be shown in this screen. So we dont have to do anything for this case.
 	- Favoriting/Unvaoriting in MyQuotes & Home screen.
 		+ Favoriting/Unvaoriting in these two screens will not automatically add/remove the quote to/from the favoriteQuote list. If you favorite quote1 in home/myquote screen. It wont be shown when you go back to favorite screen, because the favoriteQuote list contains only favorite quotes, and they were added when we first initialized the data
-		+ In this case we will have to explicitly add/remove the quote from the favoriteQuote list when a quote is favorited/un-favorited.
+		* In this case we will have to explicitly add/remove the quote from the favoriteQuote list when a quote is favorited/un-favorited.
+
+
+Quote Deleting:
+	- Deletion can only be done from the My Quotes screen.
+	- When deleting we would've to remove the quote from myQuotes, favorites and processed.
+
+Adding Quote
+	- First we need to turn the NewQuoteActivity into a fragment dialog that can be a part of main actiivty
+	- When new quote is successfully createed, add it to myQuotes, favorites and processed.
+
+
+
+
+- favorite(quote)
+	+ id = quote.docId
+	+ add id to favorites in userDoc on DB
+	+ if success
+		- quote.favorited = true
+		- add quote to favoritesQuotes
+		- respond with success
+	+ ELSE
+		- respond with failure
+
+- unFavorite(quote)
+	+ id = quote.docId
+	+ remove id from favorites in userDoc on DB
+	+ if success
+		- quote.favorited = false
+		- remove quote from favoritesQuotes
+		- respond with success
+	+ ELSE
+		- respond with failure
+
+
+- delete(quote):
+	+ id = quote.docId
+	+ delete quote with id from db
+	+ IF success
+		- remove quote from processedQuotes,favoriteQuote & myQuotes
+		- respond with success
+	+ ELSE
+		- respond with failure
+
+
+- add(quote):
+	+ add quote to db
+	+ IF success
+		- add quote to processedQuotes,favoriteQuote & myQuotes
+		- respond with success
+	+ ELSE
+		- respond with failure
+
 

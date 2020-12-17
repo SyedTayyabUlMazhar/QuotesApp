@@ -1,0 +1,15 @@
+START
+
+- selectedItem & currentFragment will be un-initialized(INITIAL STATE)
+
+- No item selected (INITIAL STATE)
+	+ selectItem(Home)
+
+- User Clicks
+	+ selectItem(clicked item)
+
+- Screen Rotation (INITIAL STATE)
+	+ selectItem(previouslySelected, fragment)
+
+
+	
