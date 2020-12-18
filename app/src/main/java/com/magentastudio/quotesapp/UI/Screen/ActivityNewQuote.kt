@@ -38,7 +38,7 @@ class ActivityNewQuote : AppCompatActivity()
                 val published = publishQuote()
                 Log.d(TAG, "Published:$published")
 
-                _d.dimiss()
+                _d.dismiss()
 
                 if (published) finish()
             }

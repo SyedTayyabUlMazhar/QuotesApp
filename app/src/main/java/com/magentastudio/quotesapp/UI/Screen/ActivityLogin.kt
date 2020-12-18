@@ -118,7 +118,7 @@ class ActivityLogin : AppCompatActivity()
                 Snackbar.make(btnLogin, SIGN_IN_FAILED_MESSAGE, Snackbar.LENGTH_LONG).show()
                 Log.e(TAG, "signIn:failed " + e)
             }
-            _d.dimiss()
+            _d.dismiss()
         }
     }
 

@@ -8,13 +8,16 @@ import android.view.Gravity
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
+import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Common.ConfirmationDialog
+import com.magentastudio.quotesapp.UI.Common.loadImage
 import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.btnNewQuote
@@ -26,6 +29,7 @@ import kotlinx.android.synthetic.main.navigation_view.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -70,8 +74,8 @@ class ActivityMain : AppCompatActivity()
             {
                 override fun yes()
                 {
-                    finish()
                     logout()
+                    finish()
                     startActivity(Intent(this@ActivityMain, ActivityLogin::class.java))
                 }
             }
@@ -90,41 +94,6 @@ class ActivityMain : AppCompatActivity()
     {
         UserRepository.loggedIn(true)
         FirebaseAuth.getInstance().signOut()
-//        LoginManager.getInstance().logOut()
-//        GoogleSignIn.getClient(applicationContext, GoogleSignInOptions.DEFAULT_SIGN_IN).signOut()
-    }
-
-    fun selectItem(@IdRes id: Int): Boolean
-    {
-        toolbar.title = navigationView.menu.findItem(id).title
-        drawer.closeDrawer(Gravity.LEFT)
-        btnNewQuote.visibility = View.GONE
-
-        selectedItemId = id
-
-        var fragment: Fragment? = null
-        when (id)
-        {
-            R.id.home ->
-            {
-                fragment = FragmentHome()
-
-                btnNewQuote.visibility = View.VISIBLE
-                btnNewQuote.setOnClickListener()
-                {
-                    startActivity(Intent(this, ActivityNewQuote::class.java))
-                }
-            }
-            R.id.favorites -> fragment = FragmentFavorites()
-            R.id.myQuotes -> fragment = FragmentMyQuotes()
-            R.id.setting -> fragment = FragmentSetting()
-        }
-
-        supportFragmentManager.beginTransaction()
-                .replace(fragmentContainer.id, fragment!!)
-                .commit()
-
-        return true
     }
 
     fun selectItem(@IdRes id: Int, fragment: Fragment?): Boolean
@@ -179,17 +148,26 @@ class ActivityMain : AppCompatActivity()
 //            }
 //        }
 
-        CoroutineScope(IO).launch()
-        {
-            val user = UserData.get()
-//            val imageRef = user.profilePicReference()
-            val imageRef = Firebase.storage.reference.child(user.profilePicPath)
+//        CoroutineScope(IO).launch()
+//        {
+//            val user = UserData.get()
+////            val imageRef = user.profilePicReference()
+//            val imageRef = Firebase.storage.reference.child(user.profilePicPath)
+//
+//            withContext(Main) {
+//                navigationView.tvUserName.setText(user.name)
+//                if (!this@ActivityMain.isDestroyed)
+//                    Glide.with(this@ActivityMain).load(imageRef)
+//                            .into(navigationView.iv_profilePicture)
+//            }
+//        }
 
-            withContext(Main) {
-                navigationView.tvUserName.setText(user.name)
-                if (!this@ActivityMain.isDestroyed)
-                    Glide.with(this@ActivityMain).load(imageRef)
-                            .into(navigationView.iv_profilePicture)
+        lifecycleScope.launchWhenStarted {
+            UserRepository.userData.collect {
+                val userData = (it as Response.Success).result
+
+                navigationView.getHeaderView(0).tvUserName.setText(userData.name)
+                loadImage(userData.profilePicPath, navigationView.getHeaderView(0).iv_profilePicture)
             }
         }
 

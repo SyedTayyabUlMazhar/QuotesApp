@@ -9,25 +9,30 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenStarted
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
+import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
+import com.magentastudio.quotesapp.UI.Common.loadImage
+import com.magentastudio.quotesapp.UserRepository
+import com.magentastudio.quotesapp.UserViewModel
 import kotlinx.android.synthetic.main.fragment_setting.*
+import kotlinx.android.synthetic.main.fragment_setting.iv_profilePicture
+import kotlinx.android.synthetic.main.quote_box.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.tasks.await
-import java.lang.NullPointerException
-import java.util.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.conflate
 
 
 class FragmentSetting : Fragment()
@@ -35,17 +40,31 @@ class FragmentSetting : Fragment()
     private val TAG = "FragmentSetting"
     private val PICK_IMAGE: Int = 241
 
+    private val viewModel by viewModels<UserViewModel>()
+
     private lateinit var profileReference: StorageReference
 
     private lateinit var userDocRef: DocumentReference
 
+    private var usernameChanged = false
+    private var profilePicChanged = false
+
     private var imageUri: Uri? = null
-    private lateinit var username: String
+    private var username: String? = null
+    private var email: String? = null
+
+    private val KEY_USERNAME_CHANGED = "KEY_USERNAME_CHANGED"
+    private val KEY_PROFILE_PIC_CHANGED = "KEY_PROFILE_PIC_CHANGED"
+
+    private val KEY_IMAGE_URI = "KEY_IMAGE_URI"
+    private val KEY_USERNAME = "KEY_USERNAME"
+    private val KEY_EMAIL = "KEY_EMAIL"
 
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
+
 
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -56,6 +75,19 @@ class FragmentSetting : Fragment()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_setting, container, false)
 
+
+    override fun onSaveInstanceState(outState: Bundle)
+    {
+        super.onSaveInstanceState(outState)
+        outState.apply {
+            putBoolean(KEY_USERNAME_CHANGED, usernameChanged)
+            putBoolean(KEY_PROFILE_PIC_CHANGED, profilePicChanged)
+
+            putParcelable(KEY_IMAGE_URI, imageUri)
+            putString(KEY_USERNAME, username)
+            putString(KEY_EMAIL, email)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
@@ -70,6 +102,7 @@ class FragmentSetting : Fragment()
         iv_confirm_icon.setOnClickListener {
             confirmLocalChangesToUserName()
             usernameEditable(false)
+            usernameChanged = true
         }
 
         iv_cancel_icon.setOnClickListener {
@@ -78,57 +111,92 @@ class FragmentSetting : Fragment()
         }
 
         btn_save.setOnClickListener { saveChanges() }
+    }
 
-        loadProfilePictureNameAndEmail()
+    override fun onActivityCreated(savedInstanceState: Bundle?)
+    {
+        super.onActivityCreated(savedInstanceState)
+
+        savedInstanceState?.run {
+            usernameChanged = getBoolean(KEY_USERNAME_CHANGED, usernameChanged)
+            profilePicChanged = getBoolean(KEY_PROFILE_PIC_CHANGED, profilePicChanged)
+
+            imageUri = getParcelable(KEY_IMAGE_URI)
+            username = getString(KEY_USERNAME)
+            email = getString(KEY_EMAIL)
+        }
+
+        if (savedInstanceState != null)
+        {
+            loadState()
+            if (imageUri == null) loadProfilePic()
+        }
+        else
+            loadProfile()
     }
 
 
-    private fun loadProfilePictureNameAndEmail()
+    private fun loadState()
     {
-        MainScope().launch {
+        imageUri?.let { loadImage(it, iv_profilePicture) }
+        if (username != null)
+        {
+            tv_usernameBig.setText(username)
+            et_username.setText(username)
+        }
+        if (email != null) tv_email.setText(email)
+    }
 
-            try
-            {
-                val usernameDeffered = CoroutineScope(IO).async { userDocRef.get().await().toObject<UserData>()!!.name }
-                tv_email.setText(FirebaseAuth.getInstance().currentUser!!.email)
 
-                //fetch path form server asynchronously
-                val imagePathFromServerDeffered = async { fetchLastUploadedImagePath() }
+    /**
+     *  Loads profile pic, name and email into views.
+     *  They are loaded from the realtime user data represented by [UserRepository.userData]
+     */
+    private fun loadProfile()
+    {
+        lifecycleScope.launchWhenStarted {
 
-                // fetch path from cache and if not empty then load image from that path
-                val imagePathFromCache = fetchLastUploadedImagePath(true)
-                if (!imagePathFromCache.isEmpty())
+            email = FirebaseAuth.getInstance().currentUser!!.email
+            tv_email.setText(email)
+
+            UserRepository.userData.collect {
+                if (it is Response.Success)
                 {
-                    val imageRef = Firebase.storage.reference.child(imagePathFromCache)
+                    val userData = it.result
 
-                    Glide.with(this@FragmentSetting).load(imageRef).placeholder(R.drawable.avatar)
-                            .into(iv_profilePicture)
+                    val profilePicPath = userData.profilePicPath
+                    username = userData.name
+
+                    tv_usernameBig.setText(username)
+                    et_username.setText(username)
+
+                    loadImage(profilePicPath, iv_profilePicture)
                 }
-
-                // if path from cache is inconsistent from path on server than load image from the server
-                val imagePathFromServer = imagePathFromServerDeffered.await()
-                if (!imagePathFromServer.contentEquals(imagePathFromCache))
-                {
-                    val imageRef = Firebase.storage.reference.child(imagePathFromServer)
-
-                    Glide.with(this@FragmentSetting).load(imageRef).placeholder(R.drawable.avatar)
-                            .into(iv_profilePicture)
-                }
-
-
-
-                username = usernameDeffered.await()
-
-                et_username.setText(username)
-                tv_usernameBig.setText(username)
-            }
-            catch (e: NullPointerException)
-            {
-                Log.e(TAG, "NPE RAISED")
-                e.printStackTrace()
             }
         }
     }
+
+    /**
+     * loads profile pic from path in [UserRepository.userData]
+     * into [iv_profilePicture]
+     */
+    private fun loadProfilePic()
+    {
+        lifecycleScope.launchWhenStarted {
+            UserRepository.userData.collect {
+                if (it is Response.Success)
+                {
+                    val userData = it.result
+
+                    val profilePicPath = userData.profilePicPath
+
+                    loadImage(profilePicPath, iv_profilePicture)
+                }
+            }
+        }
+    }
+
+
 
     private fun openGallery()
     {
@@ -143,56 +211,11 @@ class FragmentSetting : Fragment()
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK)
         {
             imageUri = data?.data
-            imageUri?.run { iv_profilePicture.setImageURI(this) }
+            imageUri?.run {
+                loadImage(this, iv_profilePicture)
+                profilePicChanged = true
+            }
         }
-    }
-
-    suspend fun uploadImage(imageUri: Uri?): String = withContext(IO)
-    {
-
-        val newImageName = UUID.randomUUID().toString() + ".jpeg"
-        val imageRef = profileReference.child(newImageName)
-
-        if (imageUri != null)
-            imageRef.putFile(imageUri).await()
-
-//        imageRef.toString()
-        newImageName
-    }
-
-    /**
-     * Fetches last uploaded image path from server or cache
-     * @return last uploaded image path or empty string if(-------there was no image uploaded or fromCache was true and cache was empty-----)
-     */
-    suspend fun fetchLastUploadedImagePath(fromCache: Boolean = false): String = withContext(IO)
-    {
-        var path = ""
-        try
-        {
-            val source = if (fromCache) Source.CACHE else Source.DEFAULT
-
-            val user = userDocRef.get(source).await().toObject<UserData>()
-            path = user!!.profilePicPath
-
-        }
-        catch (e: Exception)
-        {
-            Log.i(TAG, "fetchCurrentImagePathLocally() failed")
-            e.printStackTrace()
-        }
-
-        path
-    }
-
-    suspend fun updateImagePath(path: String) = withContext(IO) {
-        userDocRef.update("profilePicPath", path)
-    }
-
-    suspend fun deleteImage(path: String) = withContext(IO)
-    {
-        if (path.isEmpty()) return@withContext
-//        path.toStorageReference().delete()
-        Firebase.storage.reference.child(path).delete()
     }
 
 
@@ -216,31 +239,58 @@ class FragmentSetting : Fragment()
         username = et_username.text.toString()
     }
 
+
+
     fun saveChanges()
     {
-        MainScope().launch()
-        {
-            if (!isAdded) return@launch
 
-            val _d = ProgressDialog(childFragmentManager)
-            _d.show()
 
-            withContext(IO) { userDocRef.update("name", username) }
+//        CoroutineScope(IO).launch {
+//            val _d = ProgressDialog.INSTANCE(childFragmentManager)
+//            _d.show()
+//
+//            (1..10).forEach {
+//                delay(1000)
+//                Log.d(TAG, "Loading progress : ${it * 10}%")
+//            }
+//            _d.dismiss()
+//        }
+//        return
+        CoroutineScope(IO).launch {
+            val _d = ProgressDialog.INSTANCE(childFragmentManager)
 
-            withContext(IO)
+            if (profilePicChanged)
             {
-                val newImagePath = "profile/" + uploadImage(imageUri) //upload new image to storage
-                val oldImagePath = fetchLastUploadedImagePath() // fetch the path of old image from user doc
+                imageUri?.let {
+                    viewModel.changeProfilePic(it).conflate().collect { response ->
+                        when (response)
+                        {
+                            is Response.Loading -> _d.show()
+                            is Response.Success ->
+                            {
+                                Log.d(TAG, "Response.Success")
 
-                updateImagePath(newImagePath)
+                                _d.dismiss()
+                                whenStarted { Toast.makeText(context, "Successfully updated", Toast.LENGTH_SHORT).show() }
+                            }
+                            is Response.Failure ->
+                            {
+                                Log.d(TAG, "Response.Failure")
 
-                deleteImage(oldImagePath)
+                                _d.dismiss()
+                                whenStarted { Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show() }
+                            }
+                        }
+                    }
+                }
+                profilePicChanged = false
+            }
 
-                _d.dimiss()
+            if (usernameChanged)
+            {
+                username?.let { viewModel.changeName(it) }
+                usernameChanged = false
             }
         }
-
-
     }
-
 }

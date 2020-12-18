@@ -29,10 +29,23 @@ class ProgressDialog(private var fragManager: FragmentManager) : DialogFragment(
 
     private var randomId: Int = 0
 
+    companion object
+    {
+        fun INSTANCE(fragManager: FragmentManager): ProgressDialog
+        {
+            val instance = fragManager.findFragmentByTag("null") as ProgressDialog?
+
+            return instance ?: ProgressDialog(fragManager)
+
+        }
+    }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     {
+        Log.d(TAG, "onCreateView")
         retainInstance = true
-        setCancelable(false)
+        isCancelable = false
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
@@ -46,6 +59,7 @@ class ProgressDialog(private var fragManager: FragmentManager) : DialogFragment(
     {
         if (isAdded) return
 
+
         randomId = Random(System.nanoTime()).nextInt() % 100
 
         /* super.show(fragManager, null) was causing java.lang.IllegalStateException: Fragment already added
@@ -54,14 +68,15 @@ class ProgressDialog(private var fragManager: FragmentManager) : DialogFragment(
         * completely dismissed yet..*/
         Log.d(TAG, "************show()********** id:$randomId")
 
-        super.show(fragManager, null)
+        super.show(fragManager, "null")
+
 
         Log.d(TAG, "-----------show()--------- id:$randomId")
         Log.d(TAG, "                              ")
 
     }
 
-    fun dimiss()
+    override fun dismiss()
     {
         Log.d(TAG, "************dimiss()********** id:$randomId")
 
@@ -88,7 +103,7 @@ class ProgressDialog(private var fragManager: FragmentManager) : DialogFragment(
 
         super.onStart()
         Log.d(TAG, "needsToBeDismissed:$needsToBeDismissed")
-        if (needsToBeDismissed) //sometimes needsToBeDismissed Is true but the isVisible is false that is why i commented it and now it's working properly.
+        if (needsToBeDismissed /* && isVisible*/) //sometimes needsToBeDismissed Is true but the isVisible is false that is why i commented it and now it's working properly.
         {
             Log.d(TAG, "Dismissing")
             super.dismiss()
@@ -100,8 +115,16 @@ class ProgressDialog(private var fragManager: FragmentManager) : DialogFragment(
 
     override fun onDismiss(dialog: DialogInterface)
     {
+        Log.d(TAG, "onDismiss")
+
         super.onDismiss(dialog)
         needsToBeDismissed = false
+    }
+
+    override fun onDestroy()
+    {
+        Log.d(TAG, "onDestroy")
+        super.onDestroy()
     }
 }
 

@@ -1,14 +1,18 @@
 package com.magentastudio.quotesapp
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.toObject
 import com.magentastudio.quotesapp.Model.UserData
+import com.magentastudio.quotesapp.UI.Common.toStorageRef
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
+import java.lang.Exception
+import java.util.*
 
 private const val TAG = "UserRepository"
 
@@ -72,5 +76,63 @@ open class UserRepository : BaseRepository()
 //                }
             }
         }
+    }
+
+
+    fun changeProfilePic(imageUri: Uri) = flow<Response<Any>> {
+        emit(Response.Loading)
+
+        val newImagePath = uploadProfilePic(imageUri)
+        updateProfilePicPath(newImagePath)
+
+        val oldImagePath = (userData.value as Response.Success).result.profilePicPath
+        deleteProfilePic(oldImagePath)
+
+        Log.d(TAG, "emitting Response.Success")
+        emit(Response.Success(Unit))
+    }.catch { e ->
+
+        Log.e(TAG, "${e.message}")
+        e.printStackTrace()
+
+        Log.d(TAG, "emitting Response.Failure")
+        emit(Response.Failure("Failed to change profile picture."))
+    }
+
+    /**
+     *  Uploads the profile pic represented by [imageUri] and returns the path
+     *  of the uploaded image.
+     *
+     *  @param imageUri the uri of the profile pic to upload.
+     *  @return the path of the uploaded pic.
+     */
+    private suspend fun uploadProfilePic(imageUri: Uri) = withContext(IO)
+    {
+        val newImageName = UUID.randomUUID().toString() + ".jpeg"
+        val newImagePath = "profile/$newImageName"
+
+        val imageRef = newImagePath.toStorageRef()
+
+        imageRef.putFile(imageUri).await()
+
+        newImagePath
+    }
+
+    private suspend fun deleteProfilePic(path: String) = withContext(IO)
+    {
+        val imageRef = path.toStorageRef()
+
+        imageRef.delete().await()
+    }
+
+
+    private fun updateProfilePicPath(path: String)
+    {
+        userDocRef.update(UserData.PROFILE_PIC_PATH, path)
+    }
+
+    fun changeName(newName: String)
+    {
+        userDocRef.update(UserData.NAME, newName)
     }
 }

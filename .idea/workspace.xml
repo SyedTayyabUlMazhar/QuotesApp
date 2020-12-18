@@ -10,8 +10,8 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="QuoteViewModel" />
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="info" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="(UserRepository|FragmentSetting)" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="BranchesTreeState">
@@ -39,16 +39,18 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2d974879-5899-47c6-9fa4-b73154329eb6" name="Default Changelist" comment="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." />
-    <list id="566855fd-6bf5-43d4-a007-ac10573a59fc" name="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." comment="">
-      <change afterPath="$PROJECT_DIR$/DOCS/START" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/Quote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/Quote.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/UserData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/Model/UserData.kt" afterDir="false" />
+    <list default="true" id="2d974879-5899-47c6-9fa4-b73154329eb6" name="Default Changelist" comment="Now on activity recreation(when screen rotates) ActivityMain will not create new fragment, instead it will store and reuse the current fragment.">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UserViewModel.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Common/Extensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Common/Extensions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Common/ProgressDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Common/ProgressDialog.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityLogin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityLogin.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityMain.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityMain.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityNewQuote.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/ActivityNewQuote.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentSetting.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UI/Screen/FragmentSetting.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UserRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/magentastudio/quotesapp/UserRepository.kt" afterDir="false" />
     </list>
+    <list id="566855fd-6bf5-43d4-a007-ac10573a59fc" name="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -93,6 +95,7 @@
   <component name="ProjectId" id="1iJtqBprTUlAExuwa4bxgnW9Xvu" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
+    <option name="compactDirectories" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
@@ -100,13 +103,20 @@
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Pixel_C_API_29" />
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-10-29T14:58:52.707Z" />
     <property name="ResourceManagerPrefKey.ResourceType" value="DRAWABLE" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="android-custom-view/media/tayyab/Data/Softwares/AndroidSDK/sources/android-29/android/view/View.java_SELECTED" value="View" />
+    <property name="android-custom-view/media/tayyab/Data/Softwares/android-studio/.gradle/caches/modules-2/files-2.1/androidx.appcompat/appcompat/1.2.0/13e8ff89631c2e101eb6bddd12c2fb4bbd74b15d/appcompat-1.2.0-sources.jar!/androidx/appcompat/widget/AppCompatImageView.java_SELECTED" value="AppCompatImageView" />
+    <property name="android-custom-view/media/tayyab/Data/Softwares/android-studio/.gradle/caches/modules-2/files-2.1/com.google.android.material/material/1.2.1/37d55d5141066b3d118d24232fa7025b65eb3a74/material-1.2.1-sources.jar!/com/google/android/material/navigation/NavigationView.java_SELECTED" value="NavigationView" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/java" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../AndroidNew/Demos/ShimmerRecycler" />
+    <property name="multi-representation-preview/media/tayyab/Data/Softwares/AndroidSDK/sources/android-29/android/view/View.java_selected" value="Custom views" />
+    <property name="multi-representation-preview/media/tayyab/Data/Softwares/android-studio/.gradle/caches/modules-2/files-2.1/androidx.appcompat/appcompat/1.2.0/13e8ff89631c2e101eb6bddd12c2fb4bbd74b15d/appcompat-1.2.0-sources.jar!/androidx/appcompat/widget/AppCompatImageView.java_selected" value="Custom views" />
+    <property name="multi-representation-preview/media/tayyab/Data/Softwares/android-studio/.gradle/caches/modules-2/files-2.1/com.google.android.material/material/1.2.1/37d55d5141066b3d118d24232fa7025b65eb3a74/material-1.2.1-sources.jar!/com/google/android/material/navigation/NavigationView.java_selected" value="Custom views" />
     <property name="project.structure.last.edited" value="SDK Location" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Kotlin" />
   </component>
   <component name="RecentsManager">
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
@@ -232,7 +242,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608193253433</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Now on activity recreation(when screen rotates) ActivityMain will not create new fragment, instead it will store and reuse the current fragment.">
+      <created>1608193498360</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1608193498360</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -261,9 +278,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." />
-    <option name="LAST_COMMIT_MESSAGE" value="Transformed loading,voting,favoriting quotes in FragmentFavorites.kt &amp; FragmentHome.kt to a MVVM design pattern using viemodel and kotlin stateflow. &#10;Also, now the user data is loaded as static stateflow on login, a snapshot listener is attached to keep it updated." />
+    <MESSAGE value="Now on activity recreation(when screen rotates) ActivityMain will not create new fragment, instead it will store and reuse the current fragment." />
+    <option name="LAST_COMMIT_MESSAGE" value="Now on activity recreation(when screen rotates) ActivityMain will not create new fragment, instead it will store and reuse the current fragment." />
   </component>
   <component name="WindowStateProjectService">
+    <state x="415" y="0" width="527" height="728" key="#Code_Folding" timestamp="1608218381341">
+      <screen x="0" y="0" width="1366" height="729" />
+    </state>
+    <state x="415" y="0" width="527" height="728" key="#Code_Folding/0.0.1366.729@0.0.1366.729" timestamp="1608218381341" />
     <state x="469" y="84" width="419" height="561" key="#com.intellij.ide.util.MemberChooser" timestamp="1604044541198">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
@@ -288,10 +310,10 @@
       <screen x="0" y="0" width="1366" height="729" />
     </state>
     <state x="538" y="180" width="281" height="369" key="AndroidCreateXmlResourceDialog/0.0.1366.729@0.0.1366.729" timestamp="1603003068540" />
-    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2" timestamp="1608193374113">
+    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2" timestamp="1608193745035">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2/0.0.1366.729@0.0.1366.729" timestamp="1608193374113" />
+    <state x="251" y="0" width="856" height="728" key="CommitChangelistDialog2/0.0.1366.729@0.0.1366.729" timestamp="1608193745035" />
     <state x="366" y="123" width="626" height="483" key="Downloadable.Font.Dialog.Size" timestamp="1601888813050">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
@@ -304,27 +326,27 @@
       <screen x="0" y="0" width="1366" height="729" />
     </state>
     <state x="267" y="6" width="822" height="716" key="GradleDaemons/0.0.1366.729@0.0.1366.729" timestamp="1602056998515" />
-    <state width="1320" height="177" key="GridCell.Tab.0.bottom" timestamp="1608135668123">
+    <state width="1320" height="258" key="GridCell.Tab.0.bottom" timestamp="1608314240519">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state width="1320" height="177" key="GridCell.Tab.0.bottom/0.0.1366.729@0.0.1366.729" timestamp="1608135668123" />
-    <state width="1320" height="177" key="GridCell.Tab.0.center" timestamp="1608135668122">
+    <state width="1320" height="258" key="GridCell.Tab.0.bottom/0.0.1366.729@0.0.1366.729" timestamp="1608314240519" />
+    <state width="1320" height="258" key="GridCell.Tab.0.center" timestamp="1608314240518">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state width="1320" height="177" key="GridCell.Tab.0.center/0.0.1366.729@0.0.1366.729" timestamp="1608135668122" />
-    <state width="1320" height="177" key="GridCell.Tab.0.left" timestamp="1608135668122">
+    <state width="1320" height="258" key="GridCell.Tab.0.center/0.0.1366.729@0.0.1366.729" timestamp="1608314240518" />
+    <state width="1320" height="258" key="GridCell.Tab.0.left" timestamp="1608314240516">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state width="1320" height="177" key="GridCell.Tab.0.left/0.0.1366.729@0.0.1366.729" timestamp="1608135668121" />
-    <state width="1320" height="177" key="GridCell.Tab.0.right" timestamp="1608135668123">
+    <state width="1320" height="258" key="GridCell.Tab.0.left/0.0.1366.729@0.0.1366.729" timestamp="1608314240516" />
+    <state width="1320" height="258" key="GridCell.Tab.0.right" timestamp="1608314240518">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state width="1320" height="177" key="GridCell.Tab.0.right/0.0.1366.729@0.0.1366.729" timestamp="1608135668123" />
+    <state width="1320" height="258" key="GridCell.Tab.0.right/0.0.1366.729@0.0.1366.729" timestamp="1608314240518" />
     <state x="394" y="81" width="569" height="567" key="MultipleFileMergeDialog" timestamp="1604063676074">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
     <state x="394" y="81" width="569" height="567" key="MultipleFileMergeDialog/0.0.1366.729@0.0.1366.729" timestamp="1604063676074" />
-    <state x="179" y="0" key="SettingsEditor" timestamp="1608122507222">
+    <state x="179" y="0" key="SettingsEditor" timestamp="1608188470722">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
     <state x="179" y="0" key="SettingsEditor/0.0.1366.729@0.0.1366.729" timestamp="1608188470722" />
@@ -332,10 +354,10 @@
       <screen x="0" y="0" width="1366" height="729" />
     </state>
     <state x="530" y="280" width="297" height="168" key="VCS.ChangelistChooser/0.0.1366.729@0.0.1366.729" timestamp="1608193337712" />
-    <state x="278" y="101" width="802" height="527" key="Vcs.Push.Dialog.v2" timestamp="1608193262217">
+    <state x="278" y="101" width="802" height="527" key="Vcs.Push.Dialog.v2" timestamp="1608193500845">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state x="278" y="101" width="802" height="527" key="Vcs.Push.Dialog.v2/0.0.1366.729@0.0.1366.729" timestamp="1608193262217" />
+    <state x="278" y="101" width="802" height="527" key="Vcs.Push.Dialog.v2/0.0.1366.729@0.0.1366.729" timestamp="1608193500845" />
     <state x="480" y="145" width="398" height="439" key="chooseDestDirectoryDialog" timestamp="1603003250452">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
@@ -360,13 +382,13 @@
       <screen x="0" y="0" width="1366" height="729" />
     </state>
     <state x="108" y="142" width="1322" height="686" key="dock-window-1/0.0.1366.729@0.0.1366.729" timestamp="1602344511033" />
-    <state x="346" y="160" width="672" height="677" key="run.anything.popup" timestamp="1604064280043">
+    <state x="346" y="160" width="672" height="677" key="run.anything.popup" timestamp="1608185182653">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state x="346" y="160" width="672" height="677" key="run.anything.popup/0.0.1366.729@0.0.1366.729" timestamp="1604064280043" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1608134588114">
+    <state x="346" y="160" width="672" height="677" key="run.anything.popup/0.0.1366.729@0.0.1366.729" timestamp="1608185182653" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1608309937528">
       <screen x="0" y="0" width="1366" height="729" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.729@0.0.1366.729" timestamp="1608134588114" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.729@0.0.1366.729" timestamp="1608309937528" />
   </component>
 </project>
