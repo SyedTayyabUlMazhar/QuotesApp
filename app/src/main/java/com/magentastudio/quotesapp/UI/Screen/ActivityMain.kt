@@ -1,6 +1,5 @@
 package com.magentastudio.quotesapp.UI.Screen
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,11 +8,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Common.ConfirmationDialog
@@ -26,14 +21,8 @@ import kotlinx.android.synthetic.main.appbar.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.navigation_view.*
 import kotlinx.android.synthetic.main.navigation_view.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-@SuppressLint("RtlHardcoded")
 class ActivityMain : AppCompatActivity()
 {
     private val TAG = "ActivityMain"
@@ -50,24 +39,16 @@ class ActivityMain : AppCompatActivity()
         setContentView(R.layout.activity_main)
 
         toolbar.setNavigationOnClickListener { drawer.openDrawer(Gravity.LEFT) }
-
-        loadProfilePictureAndName()
-
         navigationView.setNavigationItemSelectedListener { selectItem(it.itemId, null) }
 
+        loadProfile()
 
         if (savedInstanceState == null)
         {
             selectItem(R.id.home, null)
             navigationView.setCheckedItem(R.id.home)
         }
-        else savedInstanceState.run {
-            val previouslySelectedItemId = getInt(KEY_SELECTED_ITEM_ID)
-            val previouslyCommittedFragment =
-                    supportFragmentManager.getFragment(this, KEY_CURRENT_FRAGMENT)
-
-            selectItem(previouslySelectedItemId, previouslyCommittedFragment)
-        }
+        else savedInstanceState.run { loadState(this) }
 
         ConfirmationDialog(this, "Are you sure you want to logout?").apply {
             dialogButtonClickListener = object : ConfirmationDialog.DialogButtonClickListener
@@ -90,13 +71,24 @@ class ActivityMain : AppCompatActivity()
         outState.putInt(KEY_SELECTED_ITEM_ID, selectedItemId)
     }
 
+    private fun loadState(savedInstanceState: Bundle)
+    {
+        savedInstanceState.run {
+            val previouslySelectedItemId = getInt(KEY_SELECTED_ITEM_ID)
+            val previouslyCommittedFragment =
+                    supportFragmentManager.getFragment(this, KEY_CURRENT_FRAGMENT)
+
+            selectItem(previouslySelectedItemId, previouslyCommittedFragment)
+        }
+    }
+
     private fun logout()
     {
         UserRepository.loggedIn(true)
         FirebaseAuth.getInstance().signOut()
     }
 
-    fun selectItem(@IdRes id: Int, fragment: Fragment?): Boolean
+    private fun selectItem(@IdRes id: Int, fragment: Fragment?): Boolean
     {
         drawer.closeDrawer(Gravity.LEFT)
 
@@ -131,37 +123,12 @@ class ActivityMain : AppCompatActivity()
         return true
     }
 
-    fun loadProfilePictureAndName()
+    /**
+     * load username and profile picture into header
+     * of navigation view
+     */
+    private fun loadProfile()
     {
-//        CoroutineScope(IO).launch()
-//        {
-//            val userId = FirebaseAuth.getInstance().currentUser!!.uid
-//            val user = Firebase.firestore.document("/users/$userId").get()
-//                    .await().toObject<User>()!!
-//
-//            withContext(Main) { navigationView.tvUserName.setText(user.name) }
-//
-//            val imageRef = Firebase.storage.getReferenceFromUrl(user.profilePic)
-//            withContext(Main) {
-//                if (!this@ActivityMain.isDestroyed)
-//                    Glide.with(this@ActivityMain).load(imageRef).into(navigationView.iv_profilePicture)
-//            }
-//        }
-
-//        CoroutineScope(IO).launch()
-//        {
-//            val user = UserData.get()
-////            val imageRef = user.profilePicReference()
-//            val imageRef = Firebase.storage.reference.child(user.profilePicPath)
-//
-//            withContext(Main) {
-//                navigationView.tvUserName.setText(user.name)
-//                if (!this@ActivityMain.isDestroyed)
-//                    Glide.with(this@ActivityMain).load(imageRef)
-//                            .into(navigationView.iv_profilePicture)
-//            }
-//        }
-
         lifecycleScope.launchWhenStarted {
             UserRepository.userData.collect {
                 val userData = (it as Response.Success).result
