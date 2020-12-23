@@ -3,6 +3,7 @@ package com.magentastudio.quotesapp.UI.Screen
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.IdRes
@@ -21,7 +22,10 @@ import kotlinx.android.synthetic.main.appbar.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.navigation_view.*
 import kotlinx.android.synthetic.main.navigation_view.view.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class ActivityMain : AppCompatActivity()
 {
@@ -42,6 +46,8 @@ class ActivityMain : AppCompatActivity()
         navigationView.setNavigationItemSelectedListener { selectItem(it.itemId, null) }
 
         loadProfile()
+
+        btnNewQuote.setOnClickListener { openNewQuoteFragment() }
 
         if (savedInstanceState == null)
         {
@@ -84,13 +90,13 @@ class ActivityMain : AppCompatActivity()
 
     private fun logout()
     {
-        UserRepository.loggedIn(true)
+        UserRepository.loggedIn(false)
         FirebaseAuth.getInstance().signOut()
     }
 
     private fun selectItem(@IdRes id: Int, fragment: Fragment?): Boolean
     {
-        drawer.closeDrawer(Gravity.LEFT)
+//        drawer.closeDrawer(Gravity.LEFT)
 
         if (selectedItemId == id) return false
 
@@ -106,10 +112,7 @@ class ActivityMain : AppCompatActivity()
                 currentFragment = fragment ?: FragmentHome()
 
                 btnNewQuote.visibility = View.VISIBLE
-                btnNewQuote.setOnClickListener()
-                {
-                    startActivity(Intent(this, ActivityNewQuote::class.java))
-                }
+//                btnNewQuote.setOnClickListener { openNewQuoteFragment() }
             }
             R.id.favorites -> currentFragment = fragment ?: FragmentFavorites()
             R.id.myQuotes -> currentFragment = fragment ?: FragmentMyQuotes()
@@ -120,8 +123,14 @@ class ActivityMain : AppCompatActivity()
                 .replace(fragmentContainer.id, currentFragment)
                 .commit()
 
+        MainScope().launch {
+            delay(150)
+            drawer.closeDrawer(Gravity.LEFT)
+        }
+
         return true
     }
+
 
     /**
      * load username and profile picture into header
@@ -138,5 +147,18 @@ class ActivityMain : AppCompatActivity()
             }
         }
 
+    }
+
+    private fun openNewQuoteFragment()
+    {
+        supportFragmentManager.beginTransaction().replace(
+                android.R.id.content,
+                NewQuoteFragment()
+        ).commit()
+    }
+
+    fun quoteAdded()
+    {
+        (currentFragment as FragmentHome).quoteAdded()
     }
 }

@@ -15,7 +15,7 @@ class QuoteRepository : UserRepository()
     private val TAG = "QuoteRepository"
 
     private val quotesQuery =
-        db.collection(Quote.COLLECTION).orderBy(Quote.VOTES, Query.Direction.DESCENDING)
+            db.collection(Quote.COLLECTION).orderBy(Quote.VOTES, Query.Direction.DESCENDING)
 
     suspend fun fetchQuotes() = withContext(IO) {
         val quotes = quotesQuery.get().await().toObjects<Quote>().toMutableList()
@@ -59,16 +59,17 @@ class QuoteRepository : UserRepository()
             netVoteChange += -1
 
             pendingUserDocUpdates.put(
-                UserData.UPVOTED, FieldValue.arrayRemove(quote.docId)
+                    UserData.UPVOTED, FieldValue.arrayRemove(quote.docId)
             )
 
-        } else
+        }
+        else
         {
             quote.upvoted = true
             netVoteChange += 1
 
             pendingUserDocUpdates.put(
-                UserData.UPVOTED, FieldValue.arrayUnion(quote.docId)
+                    UserData.UPVOTED, FieldValue.arrayUnion(quote.docId)
             )
         }
 
@@ -94,7 +95,7 @@ class QuoteRepository : UserRepository()
             quote.downvoted = false
 
             pendingUserDocUpdates.put(
-                UserData.DOWNVOTED, FieldValue.arrayRemove(quote.docId)
+                    UserData.DOWNVOTED, FieldValue.arrayRemove(quote.docId)
             )
 
             return 1
@@ -118,16 +119,17 @@ class QuoteRepository : UserRepository()
             netVoteChange += 1
 
             pendingUserDocUpdates.put(
-                UserData.DOWNVOTED, FieldValue.arrayRemove(quote.docId)
+                    UserData.DOWNVOTED, FieldValue.arrayRemove(quote.docId)
             )
 
-        } else
+        }
+        else
         {
             quote.downvoted = true
             netVoteChange += -1
 
             pendingUserDocUpdates.put(
-                UserData.DOWNVOTED, FieldValue.arrayUnion(quote.docId)
+                    UserData.DOWNVOTED, FieldValue.arrayUnion(quote.docId)
             )
         }
 
@@ -153,12 +155,22 @@ class QuoteRepository : UserRepository()
             quote.upvoted = false
 
             pendingUserDocUpdates.put(
-                UserData.UPVOTED, FieldValue.arrayRemove(quote.docId)
+                    UserData.UPVOTED, FieldValue.arrayRemove(quote.docId)
             )
 
             return -1
         }
 
         return 0
+    }
+
+
+
+    fun add(quote: Quote)
+    {
+        val docRef = db.collection(Quote.COLLECTION).document()
+        quote.docId = docRef.id
+
+        docRef.set(quote)
     }
 }

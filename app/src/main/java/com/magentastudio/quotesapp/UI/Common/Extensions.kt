@@ -54,6 +54,14 @@ fun Activity.loadImage(imagePath: String, imageView: ImageView)
             .into(imageView)
 }
 
+fun Context.loadImage(imagePath: String, imageView: ImageView)
+{
+    val imageRef = imagePath.toStorageRef()
+
+    Glide.with(this).load(imageRef).error(R.drawable.avatar)
+            .into(imageView)
+}
+
 fun Fragment.loadImage(imagePath: String, imageView: ImageView)
 {
     val imageRef = imagePath.toStorageRef()

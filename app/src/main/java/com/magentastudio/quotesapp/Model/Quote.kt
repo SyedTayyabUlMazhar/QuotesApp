@@ -13,9 +13,9 @@ class Quote
 
         const val QUOTE = "quote"
         const val AUTHOR = "author"
-        const val USER_ID = "user.id"
-        const val USER_NAME = "user.name"
-        const val USER_PROFILE_PIC_PATH = "user.profilePicPath"
+        const val USER_ID = "id"
+        const val USER_NAME = "name"
+        const val USER_PROFILE_PIC_PATH = "profilePicPath"
         const val VOTES = "votes"
 
     }
@@ -47,8 +47,19 @@ class Quote
     }
 
 
+
     constructor(quote: String, author: String, user: Map<String, String>, votes: Long)
     {
+        this.quote = quote
+        this.author = author
+        this.user = user
+        this.votes = votes
+    }
+
+    constructor(docId: String, quote: String, author: String, user: Map<String, String>, votes: Long)
+    {
+        this.docId = docId
+
         this.quote = quote
         this.author = author
         this.user = user

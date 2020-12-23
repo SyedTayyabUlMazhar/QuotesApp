@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.ktx.firestore
@@ -33,7 +34,7 @@ import java.lang.Exception
 class FragmentFavorites : Fragment()
 {
 
-    private val viewModel by viewModels<QuoteViewModel>()
+    private val viewModel by activityViewModels<QuoteViewModel>()
 
     val TAG = "FragmentFavorites"
 

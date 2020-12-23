@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
@@ -34,10 +36,10 @@ private const val TAG = "FragmentHome"
 class FragmentHome : Fragment()
 {
 
-    val viewModel by viewModels<QuoteViewModel>()
+    val viewModel by activityViewModels<QuoteViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_home, container, false)
 
 //    override fun onActivityCreated(savedInstanceState: Bundle?)
@@ -84,14 +86,15 @@ class FragmentHome : Fragment()
                         shimmer.visibility = View.INVISIBLE
 
                         Toast.makeText(context, it.message, Toast.LENGTH_SHORT)
-                            .show()
+                                .show()
                     }
                     is Response.Success ->
                     {
                         shimmer.visibility = View.INVISIBLE
 
+                        Log.d(TAG, "SEttign adapter")
                         rv_quotes.adapter =
-                            QuoteAdapter1(context!!, viewModel, it.result.toMutableList())
+                                QuoteAdapter1(context!!, viewModel, it.result)
                     }
                 }
             }
@@ -116,10 +119,11 @@ class FragmentHome : Fragment()
             // non-null asserted because user doc is created after on signup
 //            val user = db.document("/users/$userId").get().await().toObject<User>()!!
             val user = UserData.get()
-
             quotes.forEach { user.setUpQuote(it) }
 
-        } catch (e: Exception)
+
+        }
+        catch (e: Exception)
         {
             e.printStackTrace()
             Log.e(TAG, "Error getting quotes: ${e.message}")
@@ -127,6 +131,12 @@ class FragmentHome : Fragment()
         }
 
         quotes
+    }
+
+    fun quoteAdded()
+    {
+        (rv_quotes.adapter as RecyclerView.Adapter).run { notifyItemInserted(itemCount - 1) }
+//        rv_quotes.adapter?.run { notifyItemInserted(itemCount - 1) }
     }
 
 

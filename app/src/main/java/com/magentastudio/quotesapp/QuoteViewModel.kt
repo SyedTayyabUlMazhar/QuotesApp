@@ -1,9 +1,11 @@
 package com.magentastudio.quotesapp
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.util.Util
 import com.magentastudio.quotesapp.Model.Quote
 import com.magentastudio.quotesapp.Model.UserData
 import kotlinx.coroutines.Dispatchers.Default
@@ -13,27 +15,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
+typealias ResponseOfQuotes = Response<MutableList<Quote>>
+
 class QuoteViewModel : ViewModel()
 {
     private val TAG = "QuoteViewModel"
-    private val EMPTY_LIST = listOf<Quote>()
+    private val EMPTY_LIST = mutableListOf<Quote>()
 
     private val repository = QuoteRepository()
     private val userRepo = UserRepository()
 
 
-    private var _quotesOnly = MutableStateFlow<Response<List<Quote>>>(Response.Default(EMPTY_LIST))
+    private var _quotesOnly = MutableStateFlow<ResponseOfQuotes>(Response.Default(EMPTY_LIST))
     private var _userData = MutableStateFlow<Response<UserData>>(Response.Default(UserData()))
 
-    private var _processedQuotes =
-        MutableStateFlow<Response<List<Quote>>>(Response.Default(EMPTY_LIST))
+    private var _processedQuotes = MutableStateFlow<ResponseOfQuotes>(Response.Default(EMPTY_LIST))
     val processedQuotes = _processedQuotes.asStateFlow()
 
-    private var _myQuotes = MutableStateFlow<Response<List<Quote>>>(Response.Default(EMPTY_LIST))
+    private var _myQuotes = MutableStateFlow<ResponseOfQuotes>(Response.Default(EMPTY_LIST))
     val myQuotes = _myQuotes.asStateFlow()
 
-    private var _favoriteQuotes =
-        MutableStateFlow<Response<MutableList<Quote>>>(Response.Default(EMPTY_LIST.toMutableList()))
+    private var _favoriteQuotes = MutableStateFlow<ResponseOfQuotes>(Response.Default(EMPTY_LIST.toMutableList()))
     val favoriteQuotes = _favoriteQuotes.asStateFlow()
 
     init
@@ -65,9 +67,9 @@ class QuoteViewModel : ViewModel()
     private suspend fun loadUserData()
     {
         UserRepository.userData
-            .filter { it !is Response.Default }
-            .take(1)
-            .collect { _userData.value = it }
+                .filter { it !is Response.Default }
+                .take(1)
+                .collect { _userData.value = it }
     }
 
     private suspend fun loadPlainQuotes() = withContext(IO)
@@ -75,7 +77,8 @@ class QuoteViewModel : ViewModel()
         try
         {
             _quotesOnly.value = Response.Success(repository.fetchQuotes())
-        } catch (e: Exception)
+        }
+        catch (e: Exception)
         {
             _quotesOnly.value = Response.Failure("$e")
         }
@@ -91,11 +94,13 @@ class QuoteViewModel : ViewModel()
             {
                 Log.i(TAG, "loadProcessedQuotes() : Response:Failure")
                 Response.Failure("Error: Loading Processed Quotes")
-            } else if (userDataResponse is Response.Default || quotesResponse is Response.Default)
+            }
+            else if (userDataResponse is Response.Default || quotesResponse is Response.Default)
             {
                 Log.i(TAG, "loadProcessedQuotes() : Response:Default")
                 Response.Default(EMPTY_LIST)
-            } else
+            }
+            else
             {
                 Log.i(TAG, "loadProcessedQuotes() : Response:Success")
 
@@ -120,14 +125,17 @@ class QuoteViewModel : ViewModel()
             {
                 Log.i(TAG, "loadMyQuotes() : Response:Failure")
                 Response.Failure("Error: Loading My Quotes")
-            } else if (userDataResponse is Response.Default || quotesResponse is Response.Default)
+            }
+            else if (userDataResponse is Response.Default || quotesResponse is Response.Default)
             {
                 Log.i(TAG, "loadMyQuotes() : Response:Default")
                 Response.Default(EMPTY_LIST)
-            } else if (userDataResponse is Response.Loading || quotesResponse is Response.Loading)
+            }
+            else if (userDataResponse is Response.Loading || quotesResponse is Response.Loading)
             {
                 Response.Loading
-            } else
+            }
+            else
             {
                 Log.i(TAG, "loadMyQuotes() : Response:Success")
 
@@ -136,7 +144,7 @@ class QuoteViewModel : ViewModel()
 
                 val myQuotes = quotesResponse.result.filter {
                     it.user["id"] == UserRepository.userId
-                }
+                }.toMutableList()
 
                 Response.Success(myQuotes)
             }
@@ -154,14 +162,17 @@ class QuoteViewModel : ViewModel()
             {
                 Log.i(TAG, "loadFavoriteQuotes() : Response:Failure")
                 Response.Failure("Error: Loading Favorite Quotes")
-            } else if (userDataResponse is Response.Default || quotesResponse is Response.Default)
+            }
+            else if (userDataResponse is Response.Default || quotesResponse is Response.Default)
             {
                 Log.i(TAG, "loadFavoriteQuotes() : Response:Default")
                 Response.Default(EMPTY_LIST)
-            } else if (userDataResponse is Response.Loading || quotesResponse is Response.Loading)
+            }
+            else if (userDataResponse is Response.Loading || quotesResponse is Response.Loading)
             {
                 Response.Loading
-            } else
+            }
+            else
             {
                 Log.i(TAG, "loadFavoriteQuotes() : Response:Success")
 
@@ -172,14 +183,14 @@ class QuoteViewModel : ViewModel()
 
                 val favoriteQuotes = quotesResponse.result.filter {
                     favoriteQuotesIds.contains(it.docId)
-                }
+                }.toMutableList()
 
                 Response.Success(favoriteQuotes)
             }
         }.collect {
             Log.i(TAG, "loadFavoriteQuotes() Collecting")
 
-            _favoriteQuotes.value = it as Response<MutableList<Quote>>
+            _favoriteQuotes.value = it
         }
     }
 
@@ -215,6 +226,43 @@ class QuoteViewModel : ViewModel()
     fun toggleDownvote(quote: Quote)
     {
         repository.toggleDownvote(quote)
+    }
+
+
+    fun delete(quote: Quote)
+    {
+        quote.docRef().delete()
+        listOf(_processedQuotes, _favoriteQuotes, _myQuotes)
+                .forEach {
+                    val list = (it.value as Response.Success).result
+                    list.remove(quote)
+                }
+    }
+
+    @SuppressLint("RestrictedApi")
+    fun add(quoteText: String, author: String)
+    {
+        val userData = (UserRepository.userData.value as Response.Success).result
+
+//        val userMap = mutableMapOf<String, String>().apply {
+//            put("id", userId)
+//            put("name", userData.name)
+//            put("profilePicPath", userData.profilePicPath)
+//        }
+        val userMap = mapOf(
+                Quote.USER_ID to UserRepository.userId,
+                Quote.USER_NAME to userData.name,
+                Quote.USER_PROFILE_PIC_PATH to userData.profilePicPath
+        )
+
+//        val newQuote = Quote(Util.autoId(),quoteText, author, userMap, 0)
+        val newQuote = Quote(quoteText, author, userMap, 0)
+
+        repository.add(newQuote)
+
+        (_processedQuotes.value as Response.Success).result.add(newQuote)
+        (_myQuotes.value as Response.Success).result.add(newQuote)
+
     }
 
 }
