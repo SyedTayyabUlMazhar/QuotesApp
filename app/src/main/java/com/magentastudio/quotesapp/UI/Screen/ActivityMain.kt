@@ -9,6 +9,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenStarted
 import com.google.firebase.auth.FirebaseAuth
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.Response
@@ -66,7 +67,8 @@ class ActivityMain : AppCompatActivity()
                     startActivity(Intent(this@ActivityMain, ActivityLogin::class.java))
                 }
             }
-            navigationView.btnLogout.setOnClickListener { show() }
+//            navigationView.btnLogout.setOnClickListener { show() }
+            btnLogout.setOnClickListener { show() }
         }
     }
 
@@ -123,6 +125,7 @@ class ActivityMain : AppCompatActivity()
                 .replace(fragmentContainer.id, currentFragment)
                 .commit()
 
+
         MainScope().launch {
             delay(150)
             drawer.closeDrawer(Gravity.LEFT)
@@ -140,10 +143,13 @@ class ActivityMain : AppCompatActivity()
     {
         lifecycleScope.launchWhenStarted {
             UserRepository.userData.collect {
-                val userData = (it as Response.Success).result
+                if (it is Response.Success)
+                {
+                    val userData = it.result
 
-                navigationView.getHeaderView(0).tvUserName.setText(userData.name)
-                loadImage(userData.profilePicPath, navigationView.getHeaderView(0).iv_profilePicture)
+                    navigationView.getHeaderView(0).tvUserName.setText(userData.name)
+                    loadImage(userData.profilePicPath, navigationView.getHeaderView(0).iv_profilePicture)
+                }
             }
         }
 
