@@ -1,208 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:paddingHorizontal="8dp"
-    tools:context=".UI.Screen.FragmentSetting">
+    android:fillViewport="true"
+    android:scrollbars="none">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/iv_profilePicture"
-        android:layout_width="@dimen/profile_pic"
-        android:layout_height="@dimen/profile_pic"
-        android:layout_marginTop="5dp"
-        android:elevation="@dimen/profile_pic_elevation"
-        android:scaleType="fitCenter"
-        app:civ_border_color="@color/profile_pic_border"
-        app:civ_border_width="@dimen/profile_pic_border"
-        app:civ_shadow="true"
-        app:civ_shadow_color="@color/profile_pic_shadow"
-        app:civ_shadow_gravity="bottom"
-        app:civ_shadow_radius="@dimen/profile_pic_shadow"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/avatar" />
-
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/iv_cameraIcon"
-        android:layout_width="@dimen/camera_icon"
-        android:layout_height="@dimen/camera_icon"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:elevation="@dimen/camera_icon_elevation"
-        android:focusable="true"
-        android:scaleType="centerInside"
-        app:civ_border_color="@color/camera_icon_border"
-        app:civ_border_width="@dimen/camera_icon_border"
-        app:civ_shadow="true"
-        app:civ_shadow_color="@color/camera_icon_shadow"
-        app:civ_shadow_gravity="bottom"
-        app:civ_shadow_radius="@dimen/camera_icon_shadow"
-        app:layout_constraintBottom_toBottomOf="@id/iv_profilePicture"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintLeft_toLeftOf="@+id/iv_profilePicture"
-        app:layout_constraintRight_toRightOf="@+id/iv_profilePicture"
-        app:layout_constraintTop_toTopOf="@id/iv_profilePicture"
-        app:layout_constraintVertical_bias="1"
-        app:srcCompat="@drawable/ic_camera" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/background"
-        style="@style/SettingsBackgroundCardView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:paddingHorizontal="8dp"
+        tools:context=".UI.Screen.FragmentSetting">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/iv_profilePicture"
+            android:layout_width="@dimen/profile_pic"
+            android:layout_height="@dimen/profile_pic"
+            android:layout_marginTop="5dp"
+            android:elevation="@dimen/profile_pic_elevation"
+            android:scaleType="fitCenter"
+            app:civ_border_color="@color/profile_pic_border"
+            app:civ_border_width="@dimen/profile_pic_border"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/profile_pic_shadow"
+            app:civ_shadow_gravity="bottom"
+            app:civ_shadow_radius="@dimen/profile_pic_shadow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/avatar" />
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/iv_cameraIcon"
+            android:layout_width="@dimen/camera_icon"
+            android:layout_height="@dimen/camera_icon"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:elevation="@dimen/camera_icon_elevation"
+            android:focusable="true"
+            android:scaleType="centerInside"
+            app:civ_border_color="@color/camera_icon_border"
+            app:civ_border_width="@dimen/camera_icon_border"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/camera_icon_shadow"
+            app:civ_shadow_gravity="bottom"
+            app:civ_shadow_radius="@dimen/camera_icon_shadow"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profilePicture"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_profilePicture"
+            app:layout_constraintRight_toRightOf="@+id/iv_profilePicture"
+            app:layout_constraintTop_toTopOf="@id/iv_profilePicture"
+            app:layout_constraintVertical_bias="1"
+            app:srcCompat="@drawable/ic_camera" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/background"
+            style="@style/SettingsBackgroundCardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="8dp">
+            android:layout_marginTop="60dp">
 
-            <TextView
-                android:id="@+id/tv_usernameBig"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="44dp"
-                android:text="@string/john_doe"
-                android:textColor="@color/username_dark"
-                android:textSize="22dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_username_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="Username"
-                android:textColor="#282525"
-                android:textSize="16dp"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_usernameBig" />
-
-            <EditText
-                android:id="@+id/et_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/transparent"
-                android:enabled="false"
-                android:inputType="textPersonName"
-                android:text="@string/john_doe"
-                android:textColor="#7B7B7B"
-                android:textSize="14dp"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_username_label" />
-
-            <ImageView
-                android:id="@+id/iv_edit_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:src="@drawable/ic_edit"
-                app:layout_constraintBottom_toBottomOf="@id/et_username"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_confirm_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:src="@drawable/ic_check"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/et_username"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_cancel_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:src="@drawable/ic_cancel"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@id/et_username"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/iv_confirm_icon" />
-
-            <View
-                android:id="@+id/divider1"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="16dp"
-                android:background="#C8C8C8"
-                app:layout_constraintTop_toBottomOf="@id/et_username" />
+                android:layout_height="match_parent"
+                android:paddingHorizontal="8dp">
 
-            <TextView
-                android:id="@+id/tv_email_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
-                android:text="Email"
-                android:textColor="#282525"
-                android:textSize="16dp"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider1" />
+                <TextView
+                    android:id="@+id/tv_usernameBig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="44dp"
+                    android:text="@string/john_doe"
+                    android:textColor="@color/username_dark"
+                    android:textSize="22dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/user1_gmail_com"
-                android:textColor="#7B7B7B"
-                android:textSize="14dp"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_email_label" />
+                <TextView
+                    android:id="@+id/tv_username_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="Username"
+                    android:textColor="#282525"
+                    android:textSize="16dp"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_usernameBig" />
 
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="16dp"
-                android:background="#C8C8C8"
-                app:layout_constraintTop_toBottomOf="@id/tv_email" />
+                <EditText
+                    android:id="@+id/et_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@android:color/transparent"
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:text="@string/john_doe"
+                    android:textColor="#7B7B7B"
+                    android:textSize="14dp"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_username_label" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:paddingHorizontal="64dp"
-                android:text="Save"
-                android:textAllCaps="false"
-                app:cornerRadius="25dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2"
-                app:layout_constraintVertical_bias="0.0" />
+                <ImageView
+                    android:id="@+id/iv_edit_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintBottom_toBottomOf="@id/et_username"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+                <ImageView
+                    android:id="@+id/iv_confirm_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/ic_check"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/et_username"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_cancel_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/ic_cancel"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/et_username"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/iv_confirm_icon" />
+
+                <View
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#C8C8C8"
+                    app:layout_constraintTop_toBottomOf="@id/et_username" />
+
+                <TextView
+                    android:id="@+id/tv_email_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="35dp"
+                    android:text="Email"
+                    android:textColor="#282525"
+                    android:textSize="16dp"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/user1_gmail_com"
+                    android:textColor="#7B7B7B"
+                    android:textSize="14dp"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_email_label" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#C8C8C8"
+                    app:layout_constraintTop_toBottomOf="@id/tv_email" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:paddingHorizontal="64dp"
+                    android:text="Save"
+                    android:textAllCaps="false"
+                    app:cornerRadius="25dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

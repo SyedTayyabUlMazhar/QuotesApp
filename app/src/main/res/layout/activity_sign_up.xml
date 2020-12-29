@@ -1,157 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="32dp"
-    tools:context=".UI.Screen.ActivitySignUp">
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="32dp"
+        tools:context=".UI.Screen.ActivitySignUp">
 
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/iv_profilePicture"
-        android:layout_width="@dimen/profile_pic"
-        android:layout_height="@dimen/profile_pic"
-        android:layout_marginBottom="16dp"
-        android:elevation="@dimen/profile_pic_elevation"
-        android:scaleType="fitCenter"
-        app:civ_border_color="@color/profile_pic_border"
-        app:civ_border_width="@dimen/profile_pic_border"
-        app:civ_shadow="true"
-        app:civ_shadow_color="@color/profile_pic_shadow"
-        app:civ_shadow_gravity="bottom"
-        app:civ_shadow_radius="@dimen/profile_pic_shadow"
-        app:layout_constraintBottom_toTopOf="@id/et_userName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/avatar" />
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/iv_profilePicture"
+            android:layout_width="@dimen/profile_pic"
+            android:layout_height="@dimen/profile_pic"
+            android:layout_marginBottom="16dp"
+            android:elevation="@dimen/profile_pic_elevation"
+            android:scaleType="fitCenter"
+            app:civ_border_color="@color/profile_pic_border"
+            app:civ_border_width="@dimen/profile_pic_border"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/profile_pic_shadow"
+            app:civ_shadow_gravity="bottom"
+            app:civ_shadow_radius="@dimen/profile_pic_shadow"
+            app:layout_constraintBottom_toTopOf="@id/et_userName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:srcCompat="@drawable/avatar" />
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/iv_cameraIcon"
-        android:layout_width="@dimen/camera_icon"
-        android:layout_height="@dimen/camera_icon"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:elevation="@dimen/camera_icon_elevation"
-        android:focusable="true"
-        android:scaleType="centerInside"
-        app:civ_border_color="@color/camera_icon_border"
-        app:civ_border_width="@dimen/camera_icon_border"
-        app:civ_shadow="true"
-        app:civ_shadow_color="@color/camera_icon_shadow"
-        app:civ_shadow_gravity="bottom"
-        app:civ_shadow_radius="@dimen/camera_icon_shadow"
-        app:layout_constraintBottom_toBottomOf="@id/iv_profilePicture"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintLeft_toLeftOf="@+id/iv_profilePicture"
-        app:layout_constraintRight_toRightOf="@+id/iv_profilePicture"
-        app:layout_constraintTop_toTopOf="@id/iv_profilePicture"
-        app:layout_constraintVertical_bias="1"
-        app:srcCompat="@drawable/ic_camera" />
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/iv_cameraIcon"
+            android:layout_width="@dimen/camera_icon"
+            android:layout_height="@dimen/camera_icon"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:elevation="@dimen/camera_icon_elevation"
+            android:focusable="true"
+            android:scaleType="centerInside"
+            app:civ_border_color="@color/camera_icon_border"
+            app:civ_border_width="@dimen/camera_icon_border"
+            app:civ_shadow="true"
+            app:civ_shadow_color="@color/camera_icon_shadow"
+            app:civ_shadow_gravity="bottom"
+            app:civ_shadow_radius="@dimen/camera_icon_shadow"
+            app:layout_constraintBottom_toBottomOf="@id/iv_profilePicture"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_profilePicture"
+            app:layout_constraintRight_toRightOf="@+id/iv_profilePicture"
+            app:layout_constraintTop_toTopOf="@id/iv_profilePicture"
+            app:layout_constraintVertical_bias="1"
+            app:srcCompat="@drawable/ic_camera" />
 
-    <com.magentastudio.quotesapp.UI.Common.IconTextInput
-        android:id="@+id/et_userName"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:inputType="textPersonName"
-        app:hint="Name"
-        app:icon="@drawable/ic_person"
-        app:layout_constraintBottom_toTopOf="@+id/etEmail"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_profilePicture"
-        app:layout_constraintWidth_max="380dp"
-        app:textSize="16dp" />
+        <com.magentastudio.quotesapp.UI.Common.IconTextInput
+            android:id="@+id/et_userName"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:inputType="textPersonName"
+            app:hint="Name"
+            app:icon="@drawable/ic_person"
+            app:layout_constraintBottom_toTopOf="@+id/etEmail"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_profilePicture"
+            app:layout_constraintWidth_max="380dp"
+            app:textSize="16dp" />
 
-    <com.magentastudio.quotesapp.UI.Common.IconTextInput
-        android:id="@+id/etEmail"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:inputType="textEmailAddress"
-        app:hint="Email"
-        app:icon="@drawable/ic_email"
-        app:layout_constraintBottom_toTopOf="@+id/etPassword"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_userName"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintWidth_max="380dp"
-        app:textSize="16dp" />
+        <com.magentastudio.quotesapp.UI.Common.IconTextInput
+            android:id="@+id/etEmail"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:inputType="textEmailAddress"
+            app:hint="Email"
+            app:icon="@drawable/ic_email"
+            app:layout_constraintBottom_toTopOf="@+id/etPassword"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_userName"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintWidth_max="380dp"
+            app:textSize="16dp" />
 
-    <com.magentastudio.quotesapp.UI.Common.IconTextInput
-        android:id="@+id/etPassword"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:inputType="textPassword"
-        app:hint="Password"
-        app:icon="@drawable/ic_lock"
-        app:layout_constraintBottom_toTopOf="@+id/etConfirmPassword"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etEmail"
-        app:layout_constraintWidth_max="380dp"
-        app:textSize="16dp" />
-
-
-    <com.magentastudio.quotesapp.UI.Common.IconTextInput
-        android:id="@+id/etConfirmPassword"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:inputType="textPassword"
-        app:hint="Confirm Password"
-        app:icon="@drawable/ic_lock"
-        app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPassword"
-        app:layout_constraintWidth_max="380dp"
-        app:textSize="16dp" />
+        <com.magentastudio.quotesapp.UI.Common.IconTextInput
+            android:id="@+id/etPassword"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:inputType="textPassword"
+            app:hint="Password"
+            app:icon="@drawable/ic_lock"
+            app:layout_constraintBottom_toTopOf="@+id/etConfirmPassword"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etEmail"
+            app:layout_constraintWidth_max="380dp"
+            app:textSize="16dp" />
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSignUp"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="16dp"
-        android:maxWidth="380dp"
-        android:text="Sign Up"
-        android:textAllCaps="false"
-        app:cornerRadius="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etConfirmPassword"
-        app:layout_constraintWidth_max="380dp" />
+        <com.magentastudio.quotesapp.UI.Common.IconTextInput
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:inputType="textPassword"
+            app:hint="Confirm Password"
+            app:icon="@drawable/ic_lock"
+            app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etPassword"
+            app:layout_constraintWidth_max="380dp"
+            app:textSize="16dp" />
 
 
-    <TextView
-        android:id="@+id/tvDontHaveAnAccountYet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Already have an account?"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnLogin"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/btnLogin" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignUp"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:maxWidth="380dp"
+            android:text="Sign Up"
+            android:textAllCaps="false"
+            app:cornerRadius="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/etConfirmPassword"
+            app:layout_constraintWidth_max="380dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/tvDontHaveAnAccountYet"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin"
-        app:layout_constraintVertical_bias="1" />
-</androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/tvDontHaveAnAccountYet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account?"
+            app:layout_constraintBaseline_toBaselineOf="@id/btnLogin"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btnLogin" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogin"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/tvDontHaveAnAccountYet"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin"
+            app:layout_constraintVertical_bias="1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
