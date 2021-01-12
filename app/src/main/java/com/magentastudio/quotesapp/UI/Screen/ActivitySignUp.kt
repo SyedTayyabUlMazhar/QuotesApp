@@ -19,6 +19,7 @@ import com.google.firebase.storage.ktx.storage
 import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
+import com.magentastudio.quotesapp.UI.Common.toStorageRef
 import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import kotlinx.android.synthetic.main.activity_sign_up.btnLogin
@@ -247,17 +248,19 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
 //        }
     }
 
+
     //on signup failure
     override fun onFailure(e: Exception)
     {
         Log.e(TAG, "signup:failure", e)
-        Toast.makeText(this, "Please, check your internet connection", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "Please, check your internet connection", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
         e.printStackTrace()
     }
 
 
 
-    suspend fun uploadProfilePicAndName(userId: String)
+    private suspend fun uploadProfilePicAndName(userId: String)
     {
         val user = UserData()
         user.name = et_userName.text.toString()
@@ -265,30 +268,34 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
         withContext(Dispatchers.IO)
         {
 
-            val newImagePath = "profile/" + uploadImage() //upload new image to storage
-//            user.profilePic = newImagePath
-            user.profilePicPath = newImagePath
+            user.profilePicPath = uploadImage()
 
             Firebase.firestore.document("/users/$userId")
                 .set(user).await()
         }
     }
 
-    suspend fun uploadImage(): String = withContext(Dispatchers.IO)
+    /**
+     * Uploads image represented by [imageUri] and returns the path of uploaded image.
+     * If [imageUri] is null then an empty string is returned.
+     */
+    private suspend fun uploadImage(): String = withContext(Dispatchers.IO)
     {
 
+        if (imageUri == null) return@withContext ""
+
         val newImageName = UUID.randomUUID().toString() + ".jpeg"
-        val imageRef = profileReference.child(newImageName)
+        val newImagePath = "profile/$newImageName"
 
-        if (imageUri != null)
-            imageRef.putFile(imageUri!!).await()
+        val imageRef = newImagePath.toStorageRef()
 
-//        imageRef.toString()
-        newImageName
+        imageRef.putFile(imageUri!!).await()
+
+        newImagePath
     }
 
 
-    fun navigateToHome()
+    private fun navigateToHome()
     {
 //        Log.i(TAG, "Signed In:  Yes,  email: " + email + " profile: " + photoUrl)
         startActivity(

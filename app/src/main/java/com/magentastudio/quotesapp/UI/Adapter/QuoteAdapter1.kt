@@ -21,12 +21,12 @@ import kotlinx.android.synthetic.main.quote_box.view.*
 
 
 class QuoteAdapter1(
-        var context: Context,
-        var viewModel: QuoteViewModel,
-        var quotes: MutableList<Quote>,
-        var allowDeletion: Boolean = false,
-        var dummy: Boolean = false,
-        var showOnlyFavorites: Boolean = false
+    var context: Context,
+    var viewModel: QuoteViewModel,
+    var quotes: MutableList<Quote>,
+    var allowDeletion: Boolean = false,
+    var dummy: Boolean = false,
+    var showOnlyFavorites: Boolean = false
 ) : RecyclerView.Adapter<QuoteAdapter1.ViewHolder>()
 {
 
@@ -136,7 +136,9 @@ class QuoteAdapter1(
 
             itemView.apply {
 
-                context.loadImage(quote.user[Quote.USER_PROFILE_PIC_PATH]!!, iv_profilePicture)
+                val path = quote.user[Quote.USER_PROFILE_PIC_PATH]!!
+                if (path.isNotEmpty())
+                    context.loadImage(path, iv_profilePicture)
 
                 tv_username.text = quote.user[Quote.USER_NAME]
 
@@ -167,8 +169,7 @@ class QuoteAdapter1(
                     if (showOnlyFavorites) notifyItemRemoved()
                     else notifyItemChanged()
 
-                }
-                else
+                } else
                 {
                     viewModel.favorite(quote)
                     Log.i(TAG, "favorited quote:$shortQuote")

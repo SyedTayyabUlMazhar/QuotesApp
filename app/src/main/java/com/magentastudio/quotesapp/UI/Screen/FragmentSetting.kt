@@ -144,7 +144,8 @@ class FragmentSetting : Fragment()
             tv_usernameBig.setText(username)
             et_username.setText(username)
         }
-        if (email != null) tv_email.setText(email)
+        if (email.isNullOrEmpty()) hideEmailRelatedViews()
+        else tv_email.setText(email)
     }
 
 
@@ -158,6 +159,8 @@ class FragmentSetting : Fragment()
 
             email = FirebaseAuth.getInstance().currentUser!!.email
             tv_email.setText(email)
+
+            if (email.isNullOrEmpty()) hideEmailRelatedViews()
 
             UserRepository.userData.collect {
                 if (it is Response.Success)
@@ -239,6 +242,17 @@ class FragmentSetting : Fragment()
         username = et_username.text.toString()
     }
 
+
+    /**
+     * To be used when the user email is unknown.( like when fb user hasn't provided it)
+     */
+    fun hideEmailRelatedViews()
+    {
+        tv_email_label.visibility = View.GONE
+        tv_email.visibility = View.GONE
+        divider2.visibility = View.GONE
+
+    }
 
 
     fun saveChanges()

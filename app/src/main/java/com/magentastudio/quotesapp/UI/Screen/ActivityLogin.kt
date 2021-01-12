@@ -162,6 +162,7 @@ class ActivityLogin : AppCompatActivity()
                     }
                 } else
                 {
+                    mGoogleSignInClient.signOut()
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
                     Snackbar.make(btnLogin, "Signin Failed", Snackbar.LENGTH_LONG).show()
@@ -220,11 +221,15 @@ class ActivityLogin : AppCompatActivity()
                         startSignUpActivity(SIGN_UP_METHOD_FB, token)
                     }
                 }
+
             } else
             {
+                LoginManager.getInstance().logOut()
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithCredential:failure", task.exception)
-                Snackbar.make(btnLogin, "Signin Failed", Snackbar.LENGTH_LONG).show()
+//                Snackbar.make(btnLogin, "Signin Failed", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(btnLogin, "Failed: " + task.exception?.message, Snackbar.LENGTH_LONG)
+                    .show()
             }
         }
     }

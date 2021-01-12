@@ -45,8 +45,10 @@ open class UserRepository : BaseRepository()
                 Log.i(TAG, "Cancelling job to fetch User Data realtime")
                 snapShotListener.remove()
                 job.cancel()
-            }
-            else
+
+                //reset userdata
+                _userData.value = Response.Default(UserData())
+            } else
             {
                 Log.i(TAG, "Starting job to fetch User Data realtime")
 
