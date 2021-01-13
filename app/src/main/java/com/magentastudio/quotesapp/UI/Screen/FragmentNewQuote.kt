@@ -8,13 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.magentastudio.quotesapp.QuoteViewModel
 import com.magentastudio.quotesapp.R
-import kotlinx.android.synthetic.main.activity_new_quote.*
+import kotlinx.android.synthetic.main.fragment_new_quote.*
 
-class NewQuoteFragment : DialogFragment()
+class FragmentNewQuote : DialogFragment()
 {
     private val TAG = "NewQuoteFragment"
 
@@ -26,7 +25,7 @@ class NewQuoteFragment : DialogFragment()
             savedInstanceState: Bundle?
     ): View
     {
-        return inflater.inflate(R.layout.activity_new_quote, container, false)
+        return inflater.inflate(R.layout.fragment_new_quote, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
@@ -48,9 +47,9 @@ class NewQuoteFragment : DialogFragment()
         Log.i(TAG, "Cancelled")
     }
 
-    fun publishQuote(): Boolean
+    private fun publishQuote(): Boolean
     {
-        if (!areQuoteRequirementsSatisified()) return false
+        if (!areQuoteRequirementsSatisfied()) return false
 
         val quoteText = et_quote.text.toString()
         val author = et_author.text.toString()
@@ -60,7 +59,7 @@ class NewQuoteFragment : DialogFragment()
         return true
     }
 
-    fun areQuoteRequirementsSatisified(): Boolean
+    private fun areQuoteRequirementsSatisfied(): Boolean
     {
         if (et_quote.text.length < 35)
         {

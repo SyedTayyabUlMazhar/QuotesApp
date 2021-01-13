@@ -32,7 +32,7 @@ class QuoteRepository : UserRepository()
         val shortQuote = quote.quote.take(10) + "..." + quote.quote.takeLast(10)
 
         userDocRef.update("favorites", FieldValue.arrayUnion(quoteId))
-        Log.i(TAG, "favorited quote: $shortQuote ")
+        Log.i(TAG, "favorited quote: $shortQuote")
     }
 
     fun unfavorite(quote: Quote)
@@ -41,7 +41,7 @@ class QuoteRepository : UserRepository()
         val shortQuote = quote.quote.take(10) + "..." + quote.quote.takeLast(10)
 
         userDocRef.update("favorites", FieldValue.arrayRemove(quoteId))
-        Log.i(TAG, "unfavorited quote:$shortQuote ")
+        Log.i(TAG, "unfavorited quote:$shortQuote")
     }
 
 
@@ -58,19 +58,14 @@ class QuoteRepository : UserRepository()
             quote.upvoted = false
             netVoteChange += -1
 
-            pendingUserDocUpdates.put(
-                    UserData.UPVOTED, FieldValue.arrayRemove(quote.docId)
-            )
-
+            pendingUserDocUpdates[UserData.UPVOTED] = FieldValue.arrayRemove(quote.docId)
         }
         else
         {
             quote.upvoted = true
             netVoteChange += 1
 
-            pendingUserDocUpdates.put(
-                    UserData.UPVOTED, FieldValue.arrayUnion(quote.docId)
-            )
+            pendingUserDocUpdates[UserData.UPVOTED] = FieldValue.arrayUnion(quote.docId)
         }
 
         quote.votes += netVoteChange
@@ -88,15 +83,13 @@ class QuoteRepository : UserRepository()
      *
      * @return change of vote if any
      */
-    fun undoDownvoteIfDownvoted(quote: Quote, pendingUserDocUpdates: MutableMap<String, Any>): Int
+    private fun undoDownvoteIfDownvoted(quote: Quote, pendingUserDocUpdates: MutableMap<String, Any>): Int
     {
         if (quote.downvoted)
         {
             quote.downvoted = false
 
-            pendingUserDocUpdates.put(
-                    UserData.DOWNVOTED, FieldValue.arrayRemove(quote.docId)
-            )
+            pendingUserDocUpdates[UserData.DOWNVOTED] = FieldValue.arrayRemove(quote.docId)
 
             return 1
         }
@@ -148,15 +141,13 @@ class QuoteRepository : UserRepository()
      *
      * @return change of vote if any
      */
-    fun undoUpvoteIfUpvoted(quote: Quote, pendingUserDocUpdates: MutableMap<String, Any>): Int
+    private fun undoUpvoteIfUpvoted(quote: Quote, pendingUserDocUpdates: MutableMap<String, Any>): Int
     {
         if (quote.upvoted)
         {
             quote.upvoted = false
 
-            pendingUserDocUpdates.put(
-                    UserData.UPVOTED, FieldValue.arrayRemove(quote.docId)
-            )
+            pendingUserDocUpdates[UserData.UPVOTED] = FieldValue.arrayRemove(quote.docId)
 
             return -1
         }

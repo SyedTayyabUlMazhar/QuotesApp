@@ -29,10 +29,11 @@ import com.magentastudio.quotesapp.UserViewModel
 import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.iv_profilePicture
 import kotlinx.android.synthetic.main.quote_box.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.launch
 
 
 class FragmentSetting : Fragment()
@@ -64,7 +65,6 @@ class FragmentSetting : Fragment()
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-
 
         val userId = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -223,7 +223,7 @@ class FragmentSetting : Fragment()
 
 
 
-    fun usernameEditable(state: Boolean)
+    private fun usernameEditable(state: Boolean)
     {
         iv_edit_icon.visibility = if (state) View.INVISIBLE else View.VISIBLE
 
@@ -232,12 +232,12 @@ class FragmentSetting : Fragment()
         iv_cancel_icon.visibility = if (state) View.VISIBLE else View.INVISIBLE
     }
 
-    fun undoLocalChangesToUsername()
+    private fun undoLocalChangesToUsername()
     {
         et_username.setText(username)
     }
 
-    fun confirmLocalChangesToUserName()
+    private fun confirmLocalChangesToUserName()
     {
         username = et_username.text.toString()
     }
@@ -246,7 +246,7 @@ class FragmentSetting : Fragment()
     /**
      * To be used when the user email is unknown.( like when fb user hasn't provided it)
      */
-    fun hideEmailRelatedViews()
+    private fun hideEmailRelatedViews()
     {
         tv_email_label.visibility = View.GONE
         tv_email.visibility = View.GONE
@@ -255,56 +255,41 @@ class FragmentSetting : Fragment()
     }
 
 
-    fun saveChanges()
-    {
+    private fun saveChanges() = CoroutineScope(IO).launch {
+        val _d = ProgressDialog.INSTANCE(childFragmentManager)
 
-
-//        CoroutineScope(IO).launch {
-//            val _d = ProgressDialog.INSTANCE(childFragmentManager)
-//            _d.show()
-//
-//            (1..10).forEach {
-//                delay(1000)
-//                Log.d(TAG, "Loading progress : ${it * 10}%")
-//            }
-//            _d.dismiss()
-//        }
-//        return
-        CoroutineScope(IO).launch {
-            val _d = ProgressDialog.INSTANCE(childFragmentManager)
-
-            if (profilePicChanged)
-            {
-                imageUri?.let {
-                    viewModel.changeProfilePic(it).conflate().collect { response ->
-                        when (response)
+        if (profilePicChanged)
+        {
+            imageUri?.let {
+                viewModel.changeProfilePic(it).conflate().collect { response ->
+                    when (response)
+                    {
+                        is Response.Loading -> _d.show()
+                        is Response.Success ->
                         {
-                            is Response.Loading -> _d.show()
-                            is Response.Success ->
-                            {
-                                Log.d(TAG, "Response.Success")
+                            Log.d(TAG, "Response.Success")
 
-                                _d.dismiss()
-                                whenStarted { Toast.makeText(context, "Successfully updated", Toast.LENGTH_SHORT).show() }
-                            }
-                            is Response.Failure ->
-                            {
-                                Log.d(TAG, "Response.Failure")
+                            _d.dismiss()
+                            whenStarted { Toast.makeText(context, "Successfully updated", Toast.LENGTH_SHORT).show() }
+                        }
+                        is Response.Failure ->
+                        {
+                            Log.d(TAG, "Response.Failure")
 
-                                _d.dismiss()
-                                whenStarted { Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show() }
-                            }
+                            _d.dismiss()
+                            whenStarted { Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show() }
                         }
                     }
                 }
-                profilePicChanged = false
             }
+            profilePicChanged = false
+        }
 
-            if (usernameChanged)
-            {
-                username?.let { viewModel.changeName(it) }
-                usernameChanged = false
-            }
+        if (usernameChanged)
+        {
+            username?.let { viewModel.changeName(it) }
+            usernameChanged = false
         }
     }
+
 }

@@ -7,11 +7,16 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.toObject
 import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.UI.Common.toStorageRef
-import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
+import kotlinx.coroutines.withContext
 import java.util.*
 
 private const val TAG = "UserRepository"
@@ -58,7 +63,7 @@ open class UserRepository : BaseRepository()
 
                     snapShotListener = docRef.addSnapshotListener { docSnapshot, exception ->
 
-                        Log.i(TAG, "Received Sanpshot exception==null: ${exception == null}")
+                        Log.i(TAG, "Received Snapshot exception==null: ${exception == null}")
 
                         val userData = docSnapshot?.toObject<UserData>()
                         //can be null if there is an exception, or there isn't an exception but the document doesn't exists.

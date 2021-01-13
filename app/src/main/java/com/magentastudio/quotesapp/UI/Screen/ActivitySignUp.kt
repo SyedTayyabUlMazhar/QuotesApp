@@ -2,12 +2,12 @@ package com.magentastudio.quotesapp.UI.Screen
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.snackbar.Snackbar
@@ -22,14 +22,9 @@ import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import com.magentastudio.quotesapp.UI.Common.toStorageRef
 import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_sign_up.*
-import kotlinx.android.synthetic.main.activity_sign_up.btnLogin
-import kotlinx.android.synthetic.main.activity_sign_up.btnSignUp
-import kotlinx.android.synthetic.main.activity_sign_up.etEmail
-import kotlinx.android.synthetic.main.activity_sign_up.etPassword
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 import java.util.*
 
 
@@ -74,7 +69,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
         profileReference = Firebase.storage.reference.child("/profile")
 
         if (signUpMethod != SIGN_UP_METHOD_DIRECT)
-            hideFieldsRequiredOnlyForDirectSignup()
+            hideFieldsRequiredOnlyForDirectSignUp()
 
         imageUri = savedInstanceState?.getParcelable(KEY_URI)
         imageUri?.run { iv_profilePicture.setImageURI(this) }
@@ -88,7 +83,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
         outState.putParcelable(KEY_URI, imageUri)
     }
 
-    fun setupClickListeners()
+    private fun setupClickListeners()
     {
         iv_cameraIcon.setOnClickListener { openGallery() }
 
@@ -107,7 +102,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
         }
     }
 
-    fun hideFieldsRequiredOnlyForDirectSignup()
+    private fun hideFieldsRequiredOnlyForDirectSignUp()
     {
         val gone = View.GONE
 
@@ -120,7 +115,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     /**
      * @return true - if all required fields are properly filled.
      */
-    fun preSignUpConditionsFullfilled(): Boolean
+    private fun preSignUpConditionsFulfilled(): Boolean
     {
         val name = et_userName.text.toString()
         val email = etEmail.text.toString()
@@ -172,9 +167,9 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
         }
     }
 
-    fun signUp()
+    private fun signUp()
     {
-        if (!preSignUpConditionsFullfilled()) return
+        if (!preSignUpConditionsFulfilled()) return
 
         _d.show()
 
@@ -185,18 +180,18 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             .addOnSuccessListener(this).addOnFailureListener(this)
     }
 
-    fun fbSignUp()
+    private fun fbSignUp()
     {
-        if (!preSignUpConditionsFullfilled()) return
+        if (!preSignUpConditionsFulfilled()) return
 
         val credential = FacebookAuthProvider.getCredential(token!!)
         auth.signInWithCredential(credential)
             .addOnSuccessListener(this).addOnFailureListener(this)
     }
 
-    fun googleSignUp()
+    private fun googleSignUp()
     {
-        if (!preSignUpConditionsFullfilled()) return
+        if (!preSignUpConditionsFulfilled()) return
 
         val credential = GoogleAuthProvider.getCredential(token, null)
 

@@ -1,39 +1,19 @@
 package com.magentastudio.quotesapp.UI.Screen
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObjects
-import com.google.firebase.ktx.Firebase
-import com.magentastudio.quotesapp.Model.Quote
-import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.QuoteViewModel
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter
-import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter1
-import com.magentastudio.quotesapp.UI.Common.ProgressDialog
-import kotlinx.android.synthetic.main.fragment_favorites.*
 import kotlinx.android.synthetic.main.fragment_my_quotes.*
-import kotlinx.android.synthetic.main.fragment_my_quotes.rv_quotes
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class FragmentMyQuotes : Fragment()
 {
@@ -55,18 +35,6 @@ class FragmentMyQuotes : Fragment()
 //            rv_quotes.adapter = QuoteAdapter(context!!, it, true, true)
 //        }
 
-//        MainScope().launch {
-//            if (!isAdded) return@launch
-//
-//            val d = ProgressDialog(childFragmentManager)
-//            d.show()
-//
-//            val myQuotes = fetchMyQuotes()
-//            rv_quotes.adapter = QuoteAdapter(context!!, myQuotes, true)
-//
-//            d.dismiss()
-//        }
-
         lifecycleScope.launchWhenStarted {
             viewModel.myQuotes.collect {
                 when (it)
@@ -76,48 +44,12 @@ class FragmentMyQuotes : Fragment()
                             .show()
                     is Response.Success ->
                     {
-//                        shimmer.visibility = View.GONE
-
                         rv_quotes.adapter =
-                                QuoteAdapter1(context!!, viewModel, it.result, allowDeletion = true)
+                                QuoteAdapter(context!!, viewModel, it.result, allowDeletion = true)
                     }
                 }
             }
         }
 
-    }
-
-    suspend fun fetchMyQuotes(): MutableList<Quote> = withContext(IO) {
-
-        val db = Firebase.firestore
-        val userId = FirebaseAuth.getInstance().currentUser!!.uid
-        var quotes = listOf<Quote>()
-
-        try
-        {
-            // non-null asserted because user doc is created after email/password signup or if first time google/fb login.
-//            val user = db.document("/users/$userId").get().await().toObject<User>()!!
-            val user = UserData.get()
-
-            quotes = db.collection("quotes").whereEqualTo("user.id", userId)
-                    .orderBy("votes", Query.Direction.DESCENDING).get().await().toObjects()
-
-            quotes.forEach { user.setUpQuote(it) }
-
-        }
-        catch (e: Exception)
-        {
-            e.printStackTrace()
-            Log.e(TAG, "Error getting quotes: ${e.message}")
-            showToast("Oops, couldn't get the quotes.")
-        }
-
-        quotes.toMutableList()
-
-    }
-
-    suspend fun showToast(message: String) = withContext(Dispatchers.Main)
-    {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }

@@ -1,15 +1,13 @@
 package com.magentastudio.quotesapp.UI.Screen
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenStarted
 import com.google.firebase.auth.FirebaseAuth
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.Response
@@ -17,8 +15,6 @@ import com.magentastudio.quotesapp.UI.Common.ConfirmationDialog
 import com.magentastudio.quotesapp.UI.Common.loadImage
 import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.btnNewQuote
-import kotlinx.android.synthetic.main.activity_main.drawer
 import kotlinx.android.synthetic.main.appbar.*
 import kotlinx.android.synthetic.main.navigation_header.view.*
 import kotlinx.android.synthetic.main.navigation_view.*
@@ -159,7 +155,7 @@ class ActivityMain : AppCompatActivity()
     {
         supportFragmentManager.beginTransaction().replace(
                 android.R.id.content,
-                NewQuoteFragment()
+                FragmentNewQuote()
         ).commit()
     }
 

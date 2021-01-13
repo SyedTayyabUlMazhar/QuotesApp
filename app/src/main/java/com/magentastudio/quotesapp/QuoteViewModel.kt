@@ -1,11 +1,8 @@
 package com.magentastudio.quotesapp
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.util.Util
 import com.magentastudio.quotesapp.Model.Quote
 import com.magentastudio.quotesapp.Model.UserData
 import kotlinx.coroutines.Dispatchers.Default
@@ -13,7 +10,6 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 typealias ResponseOfQuotes = Response<MutableList<Quote>>
 
@@ -239,23 +235,16 @@ class QuoteViewModel : ViewModel()
                 }
     }
 
-    @SuppressLint("RestrictedApi")
     fun add(quoteText: String, author: String)
     {
         val userData = (UserRepository.userData.value as Response.Success).result
 
-//        val userMap = mutableMapOf<String, String>().apply {
-//            put("id", userId)
-//            put("name", userData.name)
-//            put("profilePicPath", userData.profilePicPath)
-//        }
         val userMap = mapOf(
                 Quote.USER_ID to UserRepository.userId,
                 Quote.USER_NAME to userData.name,
                 Quote.USER_PROFILE_PIC_PATH to userData.profilePicPath
         )
 
-//        val newQuote = Quote(Util.autoId(),quoteText, author, userMap, 0)
         val newQuote = Quote(quoteText, author, userMap, 0)
 
         repository.add(newQuote)

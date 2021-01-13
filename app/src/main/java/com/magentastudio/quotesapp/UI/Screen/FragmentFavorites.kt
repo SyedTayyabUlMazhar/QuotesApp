@@ -1,35 +1,19 @@
 package com.magentastudio.quotesapp.UI.Screen
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
-import com.magentastudio.quotesapp.Model.Quote
-import com.magentastudio.quotesapp.Model.UserData
 import com.magentastudio.quotesapp.QuoteViewModel
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter
-import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter1
-import com.magentastudio.quotesapp.UI.Common.ProgressDialog
-import com.magentastudio.quotesapp.UI.Common.showToastMainCoroutine
 import kotlinx.android.synthetic.main.fragment_favorites.*
-import kotlinx.android.synthetic.main.fragment_favorites.rv_quotes
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
 class FragmentFavorites : Fragment()
 {
@@ -61,7 +45,7 @@ class FragmentFavorites : Fragment()
 //                        shimmer.visibility = View.GONE
 
                         rv_quotes.adapter =
-                            QuoteAdapter1(context!!, viewModel, it.result, showOnlyFavorites = true)
+                            QuoteAdapter(context!!, viewModel, it.result, showOnlyFavorites = true)
                     }
                 }
             }

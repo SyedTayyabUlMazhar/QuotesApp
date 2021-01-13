@@ -20,13 +20,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.magentastudio.quotesapp.R
+import com.magentastudio.quotesapp.UI.Common.ProgressDialog
+import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.SIGN_UP_METHOD
 import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.SIGN_UP_METHOD_DIRECT
 import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.SIGN_UP_METHOD_FB
 import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.SIGN_UP_METHOD_GOOGLE
-import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.SIGN_UP_METHOD
 import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.TOKEN
-import com.magentastudio.quotesapp.R
-import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
@@ -71,13 +71,13 @@ class ActivityLogin : AppCompatActivity()
 
     private fun initiateButtonClickListeners()
     {
-        btnLogin.setOnClickListener { signin() }
-        btnLoginGoogle.setOnClickListener { startGoogleSigninFlow() }
-        btnLoginFacebook.setOnClickListener { startFbSigninFlow() }
+        btnLogin.setOnClickListener { signIn() }
+        btnLoginGoogle.setOnClickListener { startGoogleSignInFlow() }
+        btnLoginFacebook.setOnClickListener { startFbSignInFlow() }
         btnSignUp.setOnClickListener { startSignUpActivity(SIGN_UP_METHOD_DIRECT, null) }
     }
 
-    fun navigateToHome() = startActivity(
+    private fun navigateToHome() = startActivity(
         Intent(this@ActivityLogin, ActivityMain::class.java)
     )
 
@@ -85,7 +85,7 @@ class ActivityLogin : AppCompatActivity()
     /**
      * Signin to firebase with email/password
      */
-    fun signin()
+    private fun signIn()
     {
         hideKeyboard(this)
 
@@ -119,7 +119,7 @@ class ActivityLogin : AppCompatActivity()
 
 
 
-    fun googleSignInClient(): GoogleSignInClient
+    private fun googleSignInClient(): GoogleSignInClient
     {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -128,7 +128,7 @@ class ActivityLogin : AppCompatActivity()
         return GoogleSignIn.getClient(this, gso)
     }
 
-    fun startGoogleSigninFlow()
+    private fun startGoogleSignInFlow()
     {
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN)
@@ -168,7 +168,7 @@ class ActivityLogin : AppCompatActivity()
 
 
 
-    fun facebookLoginCompleteCallback() = object : FacebookCallback<LoginResult>
+    private fun facebookLoginCompleteCallback() = object : FacebookCallback<LoginResult>
     {
         override fun onSuccess(loginResult: LoginResult)
         {
@@ -189,7 +189,7 @@ class ActivityLogin : AppCompatActivity()
         }
     }
 
-    fun startFbSigninFlow()
+    private fun startFbSignInFlow()
     {
         Log.d(TAG, "*********** signInWithFb *************")
         LoginManager.getInstance().logIn(this, permissions)
@@ -261,7 +261,7 @@ class ActivityLogin : AppCompatActivity()
     }
 
 
-    fun hideKeyboard(activity: Activity)
+    private fun hideKeyboard(activity: Activity)
     {
         val imm: InputMethodManager =
             activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -275,7 +275,7 @@ class ActivityLogin : AppCompatActivity()
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
     }
 
-    suspend fun doesUserDocExist(userId: String): Boolean = withContext(IO)
+    private suspend fun doesUserDocExist(userId: String): Boolean = withContext(IO)
     {
         val docRef = Firebase.firestore.document("/users/${userId}")
         val userDoc = docRef.get().await()
@@ -283,7 +283,7 @@ class ActivityLogin : AppCompatActivity()
         userDoc.exists()
     }
 
-    fun startSignUpActivity(signUpMethod: String, token: String?)
+    private fun startSignUpActivity(signUpMethod: String, token: String?)
     {
         val intent = Intent(this@ActivityLogin, ActivitySignUp::class.java)
         intent.putExtra(SIGN_UP_METHOD, signUpMethod)
