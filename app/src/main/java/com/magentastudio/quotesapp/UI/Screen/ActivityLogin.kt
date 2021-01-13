@@ -29,6 +29,7 @@ import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import com.magentastudio.quotesapp.UserRepository
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -50,8 +51,6 @@ class ActivityLogin : AppCompatActivity()
 
     private lateinit var callbackManager: CallbackManager
     private val permissions = listOf("email", "public_profile")
-
-    private val _d = ProgressDialog(supportFragmentManager)
 
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -78,14 +77,9 @@ class ActivityLogin : AppCompatActivity()
         btnSignUp.setOnClickListener { startSignUpActivity(SIGN_UP_METHOD_DIRECT, null) }
     }
 
-    fun navigateToHome()
-    {
-//        Log.i(TAG, "Signed In:  Yes,  email: " + email + " profile: " + photoUrl)
-        UserRepository.loggedIn(true)
-        startActivity(
-            Intent(this@ActivityLogin, ActivityMain::class.java)
-        )
-    }
+    fun navigateToHome() = startActivity(
+        Intent(this@ActivityLogin, ActivityMain::class.java)
+    )
 
 
     /**
@@ -105,8 +99,9 @@ class ActivityLogin : AppCompatActivity()
             return
         }
 
+        CoroutineScope(IO).launch {
+            val _d = ProgressDialog.INSTANCE(supportFragmentManager)
 
-        MainScope().launch {
             _d.show()
             try
             {
@@ -115,8 +110,8 @@ class ActivityLogin : AppCompatActivity()
                 loginSuccess()
             } catch (e: Exception)
             {
-                Snackbar.make(btnLogin, SIGN_IN_FAILED_MESSAGE, Snackbar.LENGTH_LONG).show()
-                Log.e(TAG, "signIn:failed " + e)
+                Snackbar.make(btnLogin, "${e.message}", Snackbar.LENGTH_LONG).show()
+                Log.e(TAG, "signIn:failed $e")
             }
             _d.dismiss()
         }
@@ -165,7 +160,8 @@ class ActivityLogin : AppCompatActivity()
                     mGoogleSignInClient.signOut()
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Snackbar.make(btnLogin, "Signin Failed", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(btnLogin, "Failed: " + task.exception?.message, Snackbar.LENGTH_LONG)
+                        .show()
                 }
             }
     }

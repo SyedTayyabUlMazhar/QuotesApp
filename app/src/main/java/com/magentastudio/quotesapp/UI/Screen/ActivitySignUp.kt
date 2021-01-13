@@ -26,11 +26,9 @@ import kotlinx.android.synthetic.main.activity_sign_up.btnLogin
 import kotlinx.android.synthetic.main.activity_sign_up.btnSignUp
 import kotlinx.android.synthetic.main.activity_sign_up.etEmail
 import kotlinx.android.synthetic.main.activity_sign_up.etPassword
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
 
@@ -52,7 +50,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     }
 
     private lateinit var auth: FirebaseAuth
-    private val _d = ProgressDialog(supportFragmentManager)
+    private val _d = ProgressDialog.INSTANCE(supportFragmentManager)
 
 
     private lateinit var signUpMethod: String //always provided when launching actiivty
@@ -178,6 +176,8 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     {
         if (!preSignUpConditionsFullfilled()) return
 
+        _d.show()
+
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
 
@@ -233,7 +233,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     {
         val user = auth.currentUser!!
 
-        MainScope().launch {
+        CoroutineScope(IO).launch {
             _d.show()
 
             uploadProfilePicAndName(user.uid)
@@ -242,16 +242,14 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             UserRepository.loggedIn(true)
             navigateToHome()
         }
-//        ProgressDialogOld(this).untilCompletes {
-//            uploadProfilePicAndName(user.uid)
-//            navigateToHome(user)
-//        }
     }
 
 
     //on signup failure
     override fun onFailure(e: Exception)
     {
+        _d.dismiss()
+
         Log.e(TAG, "signup:failure", e)
 //        Toast.makeText(this, "Please, check your internet connection", Toast.LENGTH_SHORT).show()
         Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
