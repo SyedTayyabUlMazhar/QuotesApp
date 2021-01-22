@@ -13,7 +13,7 @@ import com.magentastudio.quotesapp.QuoteViewModel
 import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.loadImage
 import com.magentastudio.quotesapp.UI.Common.setTint
-import kotlinx.android.synthetic.main.quote_box.view.*
+import com.magentastudio.quotesapp.databinding.QuoteBoxBinding
 
 
 class QuoteAdapter(
@@ -28,15 +28,13 @@ class QuoteAdapter(
 
     private val TAG = "QuoteAdapter"
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
     {
         val inflater = LayoutInflater.from(context)
-        inflater.inflate(R.layout.quote_box, parent, false).apply {
-            delete_icon.visibility = if (allowDeletion) View.VISIBLE else delete_icon.visibility
-
-            return ViewHolder(this)
+        val binding = QuoteBoxBinding.inflate(inflater, parent, false).apply {
+            deleteIcon.visibility = if (allowDeletion) View.VISIBLE else deleteIcon.visibility
         }
+        return ViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int)
@@ -52,42 +50,40 @@ class QuoteAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
+        private val binding: QuoteBoxBinding = QuoteBoxBinding.bind(itemView)
+
         private lateinit var quote: Quote
         private lateinit var shortQuote: String
 
         private val COLORS = arrayOf(R.color.colorAccent, R.color.item_unselected)
 
-        fun bind(quote: Quote)
-        {
+        fun bind(quote: Quote) = binding.run {
             Log.d(TAG, "bind quote: $quote")
 
-            this.quote = quote
-            this.shortQuote = quote.quote.take(10) + "..." + quote.quote.takeLast(10)
+            this@ViewHolder.quote = quote
+            this@ViewHolder.shortQuote = quote.quote.take(10) + "..." + quote.quote.takeLast(10)
 
-            itemView.apply {
+            val path = quote.user[Quote.USER_PROFILE_PIC_PATH]!!
+            if (path.isNotEmpty())
+                context.loadImage(path, ivProfilePicture)
 
-                val path = quote.user[Quote.USER_PROFILE_PIC_PATH]!!
-                if (path.isNotEmpty())
-                    context.loadImage(path, iv_profilePicture)
+            tvUsername.text = quote.user[Quote.USER_NAME]
 
-                tv_username.text = quote.user[Quote.USER_NAME]
+            tvQuote.text = quote.quote
+            tvAuthor.text = quote.author
 
-                tv_quote.text = quote.quote
-                tv_author.text = quote.author
+            tvVoteCount.text = quote.votes.toString()
 
-                tv_vote_count.text = quote.votes.toString()
-
-                favorite_icon.setTint(if (quote.favorited) COLORS[0] else COLORS[1])
-                upvote_icon.setTint(if (quote.upvoted) COLORS[0] else COLORS[1])
-                downvote_icon.setTint(if (quote.downvoted) COLORS[0] else COLORS[1])
-            }
+            favoriteIcon.setTint(if (quote.favorited) COLORS[0] else COLORS[1])
+            upvoteIcon.setTint(if (quote.upvoted) COLORS[0] else COLORS[1])
+            downvoteIcon.setTint(if (quote.downvoted) COLORS[0] else COLORS[1])
 
             bindListeners()
         }
 
-        private fun bindListeners() = itemView.apply {
+        private fun bindListeners() = binding.run {
 
-            favorite_icon.setOnClickListener {
+            favoriteIcon.setOnClickListener {
 
                 Log.i(TAG, "quote:$shortQuote, favorited:${quote.favorited}")
 
@@ -108,19 +104,19 @@ class QuoteAdapter(
                 }
             }
 
-            delete_icon.setOnClickListener {
+            deleteIcon.setOnClickListener {
                 viewModel.delete(quote)
                 notifyItemRemoved()
             }
 
-            share_icon.setOnClickListener { share() }
+            shareIcon.setOnClickListener { share() }
 
-            upvote_icon.setOnClickListener {
+            upvoteIcon.setOnClickListener {
                 viewModel.toggleUpvote(quote)
                 notifyItemChanged()
             }
 
-            downvote_icon.setOnClickListener {
+            downvoteIcon.setOnClickListener {
                 viewModel.toggleDownvote(quote)
                 notifyItemChanged()
             }

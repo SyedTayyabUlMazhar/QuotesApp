@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -11,6 +10,7 @@ android {
     defaultConfig {
         applicationId "com.magentastudio.quotesapp"
         minSdkVersion 21
+        //noinspection OldTargetApi
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -18,12 +18,22 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures{
+        viewBinding = true
+    }
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
@@ -39,17 +49,17 @@ dependencies {
 
 
 // <AUTHENTICATION>
-    implementation 'com.google.firebase:firebase-auth:20.0.1'
+    implementation 'com.google.firebase:firebase-auth:20.0.2'
     implementation 'com.google.android.gms:play-services-auth:19.0.0' //for google auth
     implementation 'com.facebook.android:facebook-login:[5,6)' //for fb auth
 
 // <Firestore>
-    implementation 'com.google.firebase:firebase-firestore:22.0.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-firestore:22.0.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:22.0.1'
 
 // <storage>
-    implementation 'com.google.firebase:firebase-storage:19.2.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:19.2.0'
+    implementation 'com.google.firebase:firebase-storage:19.2.1'
+    implementation 'com.google.firebase:firebase-storage-ktx:19.2.1'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     kapt "com.github.bumptech.glide:compiler:4.11.0"
     implementation 'com.firebaseui:firebase-ui-storage:7.1.0'
@@ -70,6 +80,6 @@ dependencies {
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
-    implementation 'androidx.fragment:fragment-ktx:1.1.0'
+    implementation 'androidx.fragment:fragment-ktx:1.2.5'
 }
 

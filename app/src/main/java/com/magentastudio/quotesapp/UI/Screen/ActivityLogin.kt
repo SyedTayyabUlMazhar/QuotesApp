@@ -28,7 +28,7 @@ import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.SIGN_UP_ME
 import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.SIGN_UP_METHOD_GOOGLE
 import com.magentastudio.quotesapp.UI.Screen.ActivitySignUp.Companion.TOKEN
 import com.magentastudio.quotesapp.UserRepository
-import kotlinx.android.synthetic.main.activity_login.*
+import com.magentastudio.quotesapp.databinding.ActivityLoginBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.MainScope
@@ -41,6 +41,8 @@ import kotlinx.coroutines.withContext
 class ActivityLogin : AppCompatActivity()
 {
     private val TAG = "ActivityLogin"
+    private lateinit var binding: ActivityLoginBinding
+
     private val SIGN_IN_FAILED_MESSAGE =
         "Authentication Failed. Ensure that you've entered correct email, password and your internet is working properly"
 
@@ -56,7 +58,8 @@ class ActivityLogin : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
 
@@ -71,10 +74,10 @@ class ActivityLogin : AppCompatActivity()
 
     private fun initiateButtonClickListeners()
     {
-        btnLogin.setOnClickListener { signIn() }
-        btnLoginGoogle.setOnClickListener { startGoogleSignInFlow() }
-        btnLoginFacebook.setOnClickListener { startFbSignInFlow() }
-        btnSignUp.setOnClickListener { startSignUpActivity(SIGN_UP_METHOD_DIRECT, null) }
+        binding.btnLogin.setOnClickListener { signIn() }
+        binding.btnLoginGoogle.setOnClickListener { startGoogleSignInFlow() }
+        binding.btnLoginFacebook.setOnClickListener { startFbSignInFlow() }
+        binding.btnSignUp.setOnClickListener { startSignUpActivity(SIGN_UP_METHOD_DIRECT, null) }
     }
 
     private fun navigateToHome() = startActivity(
@@ -89,13 +92,13 @@ class ActivityLogin : AppCompatActivity()
     {
         hideKeyboard(this)
 
-        val email = etEmail.text.toString()
-        val password = etPassword.text.toString()
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
 
         //some validation
         if (email.isEmpty() || password.isEmpty())
         {
-            Snackbar.make(btnLogin, "Please, enter email and password", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.btnLogin, "Please, enter email and password", Snackbar.LENGTH_LONG).show()
             return
         }
 
@@ -110,7 +113,7 @@ class ActivityLogin : AppCompatActivity()
                 loginSuccess()
             } catch (e: Exception)
             {
-                Snackbar.make(btnLogin, "${e.message}", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.btnLogin, "${e.message}", Snackbar.LENGTH_LONG).show()
                 Log.e(TAG, "signIn:failed $e")
             }
             _d.dismiss()
@@ -160,7 +163,11 @@ class ActivityLogin : AppCompatActivity()
                     mGoogleSignInClient.signOut()
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Snackbar.make(btnLogin, "Failed: " + task.exception?.message, Snackbar.LENGTH_LONG)
+                    Snackbar.make(
+                        binding.btnLogin,
+                        "Failed: " + task.exception?.message,
+                        Snackbar.LENGTH_LONG
+                    )
                         .show()
                 }
             }
@@ -224,7 +231,7 @@ class ActivityLogin : AppCompatActivity()
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithCredential:failure", task.exception)
 //                Snackbar.make(btnLogin, "Signin Failed", Snackbar.LENGTH_LONG).show()
-                Snackbar.make(btnLogin, "Failed: " + task.exception?.message, Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.btnLogin, "Failed: " + task.exception?.message, Snackbar.LENGTH_LONG)
                     .show()
             }
         }

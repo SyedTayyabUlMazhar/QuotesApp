@@ -1,5 +1,6 @@
 package com.magentastudio.quotesapp.UI.Screen
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
@@ -14,11 +15,9 @@ import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Common.ConfirmationDialog
 import com.magentastudio.quotesapp.UI.Common.loadImage
 import com.magentastudio.quotesapp.UserRepository
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.appbar.*
-import kotlinx.android.synthetic.main.navigation_header.view.*
-import kotlinx.android.synthetic.main.navigation_view.*
-import kotlinx.android.synthetic.main.navigation_view.view.*
+import com.magentastudio.quotesapp.databinding.ActivityMainBinding
+import com.magentastudio.quotesapp.databinding.NavigationHeaderBinding
+import com.magentastudio.quotesapp.databinding.NavigationViewBinding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -28,28 +27,35 @@ class ActivityMain : AppCompatActivity()
 {
     private val TAG = "ActivityMain"
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navViewBinding: NavigationViewBinding
+
     private val KEY_SELECTED_ITEM_ID = "KEY_SELECTED_ITEM_ID"
     private var selectedItemId = 0
 
     private val KEY_CURRENT_FRAGMENT = "CURRENT_FRAGMENT"
     private lateinit var currentFragment: Fragment
 
+    @SuppressLint("RtlHardcoded")
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        toolbar.setNavigationOnClickListener { drawer.openDrawer(Gravity.LEFT) }
-        navigationView.setNavigationItemSelectedListener { selectItem(it.itemId, null) }
+        navViewBinding = binding.incNavView
+
+        binding.appbar.toolbar.setNavigationOnClickListener { binding.drawer.openDrawer(Gravity.LEFT) }
+        navViewBinding.navigationView.setNavigationItemSelectedListener { selectItem(it.itemId, null) }
 
         loadProfile()
 
-        btnNewQuote.setOnClickListener { openNewQuoteFragment() }
+        binding.btnNewQuote.setOnClickListener { openNewQuoteFragment() }
 
         if (savedInstanceState == null)
         {
             selectItem(R.id.home, null)
-            navigationView.setCheckedItem(R.id.home)
+            navViewBinding.navigationView.setCheckedItem(R.id.home)
         }
         else savedInstanceState.run { loadState(this) }
 
@@ -64,7 +70,7 @@ class ActivityMain : AppCompatActivity()
                 }
             }
 //            navigationView.btnLogout.setOnClickListener { show() }
-            btnLogout.setOnClickListener { show() }
+            navViewBinding.btnLogout.setOnClickListener { show() }
         }
     }
 
@@ -92,14 +98,15 @@ class ActivityMain : AppCompatActivity()
         FirebaseAuth.getInstance().signOut()
     }
 
+    @SuppressLint("RtlHardcoded")
     private fun selectItem(@IdRes id: Int, fragment: Fragment?): Boolean
     {
 //        drawer.closeDrawer(Gravity.LEFT)
 
         if (selectedItemId == id) return false
 
-        toolbar.title = navigationView.menu.findItem(id).title
-        btnNewQuote.visibility = View.GONE
+        binding.appbar.toolbar.title = navViewBinding.navigationView.menu.findItem(id).title
+        binding.btnNewQuote.visibility = View.GONE
 
         selectedItemId = id
 
@@ -109,7 +116,7 @@ class ActivityMain : AppCompatActivity()
             {
                 currentFragment = fragment ?: FragmentHome()
 
-                btnNewQuote.visibility = View.VISIBLE
+                binding.btnNewQuote.visibility = View.VISIBLE
 //                btnNewQuote.setOnClickListener { openNewQuoteFragment() }
             }
             R.id.favorites -> currentFragment = fragment ?: FragmentFavorites()
@@ -118,13 +125,13 @@ class ActivityMain : AppCompatActivity()
         }
 
         supportFragmentManager.beginTransaction()
-                .replace(fragmentContainer.id, currentFragment)
+                .replace(binding.fragmentContainer.id, currentFragment)
                 .commit()
 
 
         MainScope().launch {
             delay(150)
-            drawer.closeDrawer(Gravity.LEFT)
+            binding.drawer.closeDrawer(Gravity.LEFT)
         }
 
         return true
@@ -142,9 +149,10 @@ class ActivityMain : AppCompatActivity()
                 if (it is Response.Success)
                 {
                     val userData = it.result
+                    val navHeaderBinding = NavigationHeaderBinding.bind(navViewBinding.navigationView.getHeaderView(0))
 
-                    navigationView.getHeaderView(0).tvUserName.setText(userData.name)
-                    loadImage(userData.profilePicPath, navigationView.getHeaderView(0).iv_profilePicture)
+                    navHeaderBinding.tvUserName.setText(userData.name)
+                    loadImage(userData.profilePicPath, navHeaderBinding.ivProfilePicture)
                 }
             }
         }

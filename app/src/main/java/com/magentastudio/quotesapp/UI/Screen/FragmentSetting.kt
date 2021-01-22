@@ -20,15 +20,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import com.magentastudio.quotesapp.UI.Common.loadImage
 import com.magentastudio.quotesapp.UserRepository
 import com.magentastudio.quotesapp.UserViewModel
-import kotlinx.android.synthetic.main.fragment_setting.*
-import kotlinx.android.synthetic.main.fragment_setting.iv_profilePicture
-import kotlinx.android.synthetic.main.quote_box.*
+import com.magentastudio.quotesapp.databinding.FragmentSettingBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.collect
@@ -39,6 +36,8 @@ import kotlinx.coroutines.launch
 class FragmentSetting : Fragment()
 {
     private val TAG = "FragmentSetting"
+    private lateinit var binding: FragmentSettingBinding
+
     private val PICK_IMAGE: Int = 241
 
     private val viewModel by viewModels<UserViewModel>()
@@ -72,8 +71,13 @@ class FragmentSetting : Fragment()
         userDocRef = Firebase.firestore.document("/users/$userId")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_setting, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View
+    {
+        binding = FragmentSettingBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
 
     override fun onSaveInstanceState(outState: Bundle)
@@ -89,28 +93,26 @@ class FragmentSetting : Fragment()
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-    {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = binding.run {
         super.onViewCreated(view, savedInstanceState)
 
-
-        iv_cameraIcon.setOnClickListener { openGallery() }
-        iv_edit_icon.setOnClickListener {
+        ivCameraIcon.setOnClickListener { openGallery() }
+        ivEditIcon.setOnClickListener {
             usernameEditable(true)
         }
 
-        iv_confirm_icon.setOnClickListener {
+        ivConfirmIcon.setOnClickListener {
             confirmLocalChangesToUserName()
             usernameEditable(false)
             usernameChanged = true
         }
 
-        iv_cancel_icon.setOnClickListener {
+        ivCancelIcon.setOnClickListener {
             undoLocalChangesToUsername()
             usernameEditable(false)
         }
 
-        btn_save.setOnClickListener { saveChanges() }
+        btnSave.setOnClickListener { saveChanges() }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?)
@@ -130,22 +132,22 @@ class FragmentSetting : Fragment()
         {
             loadState()
             if (imageUri == null) loadProfilePic()
-        }
-        else
+        } else
             loadProfile()
     }
 
 
-    private fun loadState()
-    {
-        imageUri?.let { loadImage(it, iv_profilePicture) }
+    private fun loadState() = binding.run {
+
+        imageUri?.let { loadImage(it, ivProfilePicture) }
         if (username != null)
         {
-            tv_usernameBig.setText(username)
-            et_username.setText(username)
+            tvUsernameBig.setText(username)
+            etUsername.setText(username)
         }
         if (email.isNullOrEmpty()) hideEmailRelatedViews()
-        else tv_email.setText(email)
+        else tvEmail.setText(email)
+
     }
 
 
@@ -153,36 +155,35 @@ class FragmentSetting : Fragment()
      *  Loads profile pic, name and email into views.
      *  They are loaded from the realtime user data represented by [UserRepository.userData]
      */
-    private fun loadProfile()
-    {
-        lifecycleScope.launchWhenStarted {
+    private fun loadProfile() = lifecycleScope.launchWhenStarted {
 
-            email = FirebaseAuth.getInstance().currentUser!!.email
-            tv_email.setText(email)
+        email = FirebaseAuth.getInstance().currentUser!!.email
+        binding.tvEmail.setText(email)
 
-            if (email.isNullOrEmpty()) hideEmailRelatedViews()
+        if (email.isNullOrEmpty()) hideEmailRelatedViews()
 
-            UserRepository.userData.collect {
-                if (it is Response.Success)
-                {
-                    val userData = it.result
+        UserRepository.userData.collect {
+            if (it is Response.Success)
+            {
+                val userData = it.result
 
-                    val profilePicPath = userData.profilePicPath
-                    username = userData.name
+                val profilePicPath = userData.profilePicPath
+                username = userData.name
 
-                    tv_usernameBig.setText(username)
-                    et_username.setText(username)
+                binding.tvUsernameBig.setText(username)
+                binding.etUsername.setText(username)
 
-                    loadImage(profilePicPath, iv_profilePicture)
-                }
+                loadImage(profilePicPath, binding.ivProfilePicture)
             }
         }
+
     }
 
     /**
      * loads profile pic from path in [UserRepository.userData]
-     * into [iv_profilePicture]
+     * into [binding.ivProfilePicture]
      */
+    @Suppress("KDocUnresolvedReference")
     private fun loadProfilePic()
     {
         lifecycleScope.launchWhenStarted {
@@ -193,7 +194,7 @@ class FragmentSetting : Fragment()
 
                     val profilePicPath = userData.profilePicPath
 
-                    loadImage(profilePicPath, iv_profilePicture)
+                    loadImage(profilePicPath, binding.ivProfilePicture)
                 }
             }
         }
@@ -215,7 +216,7 @@ class FragmentSetting : Fragment()
         {
             imageUri = data?.data
             imageUri?.run {
-                loadImage(this, iv_profilePicture)
+                loadImage(this, binding.ivProfilePicture)
                 profilePicChanged = true
             }
         }
@@ -223,35 +224,34 @@ class FragmentSetting : Fragment()
 
 
 
-    private fun usernameEditable(state: Boolean)
-    {
-        iv_edit_icon.visibility = if (state) View.INVISIBLE else View.VISIBLE
+    private fun usernameEditable(state: Boolean) = binding.run {
 
-        et_username.isEnabled = state
-        iv_confirm_icon.visibility = if (state) View.VISIBLE else View.INVISIBLE
-        iv_cancel_icon.visibility = if (state) View.VISIBLE else View.INVISIBLE
+        ivEditIcon.visibility = if (state) View.INVISIBLE else View.VISIBLE
+
+        etUsername.isEnabled = state
+        ivConfirmIcon.visibility = if (state) View.VISIBLE else View.INVISIBLE
+        ivCancelIcon.visibility = if (state) View.VISIBLE else View.INVISIBLE
+
     }
 
     private fun undoLocalChangesToUsername()
     {
-        et_username.setText(username)
+        binding.etUsername.setText(username)
     }
 
     private fun confirmLocalChangesToUserName()
     {
-        username = et_username.text.toString()
+        username = binding.etUsername.text.toString()
     }
 
 
     /**
      * To be used when the user email is unknown.( like when fb user hasn't provided it)
      */
-    private fun hideEmailRelatedViews()
-    {
-        tv_email_label.visibility = View.GONE
-        tv_email.visibility = View.GONE
+    private fun hideEmailRelatedViews() = binding.run {
+        tvEmailLabel.visibility = View.GONE
+        tvEmail.visibility = View.GONE
         divider2.visibility = View.GONE
-
     }
 
 
@@ -270,14 +270,26 @@ class FragmentSetting : Fragment()
                             Log.d(TAG, "Response.Success")
 
                             _d.dismiss()
-                            whenStarted { Toast.makeText(context, "Successfully updated", Toast.LENGTH_SHORT).show() }
+                            whenStarted {
+                                Toast.makeText(
+                                    context,
+                                    "Successfully updated",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                         is Response.Failure ->
                         {
                             Log.d(TAG, "Response.Failure")
 
                             _d.dismiss()
-                            whenStarted { Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show() }
+                            whenStarted {
+                                Toast.makeText(
+                                    context,
+                                    response.message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }

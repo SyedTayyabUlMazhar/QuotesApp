@@ -17,11 +17,10 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.magentastudio.quotesapp.Model.UserData
-import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.UI.Common.ProgressDialog
 import com.magentastudio.quotesapp.UI.Common.toStorageRef
 import com.magentastudio.quotesapp.UserRepository
-import kotlinx.android.synthetic.main.activity_sign_up.*
+import com.magentastudio.quotesapp.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.tasks.await
@@ -32,6 +31,8 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     OnFailureListener
 {
     private val TAG = "ActivitySignUp"
+    private lateinit var binding: ActivitySignUpBinding
+
     private val KEY_URI = "URI"
 
     companion object
@@ -59,7 +60,8 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
 
@@ -72,7 +74,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             hideFieldsRequiredOnlyForDirectSignUp()
 
         imageUri = savedInstanceState?.getParcelable(KEY_URI)
-        imageUri?.run { iv_profilePicture.setImageURI(this) }
+        imageUri?.run { binding.ivProfilePicture.setImageURI(this) }
 
         setupClickListeners()
     }
@@ -85,9 +87,9 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
 
     private fun setupClickListeners()
     {
-        iv_cameraIcon.setOnClickListener { openGallery() }
+        binding.ivCameraIcon.setOnClickListener { openGallery() }
 
-        btnSignUp.setOnClickListener {
+        binding.btnSignUp.setOnClickListener {
             when (signUpMethod)
             {
                 SIGN_UP_METHOD_DIRECT -> signUp()
@@ -96,7 +98,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             }
         }
 
-        btnLogin.setOnClickListener {
+        binding.btnLogin.setOnClickListener {
             finish()
             startActivity(Intent(this, ActivityLogin::class.java))
         }
@@ -106,9 +108,9 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     {
         val gone = View.GONE
 
-        etEmail.visibility = gone
-        etPassword.visibility = gone
-        etConfirmPassword.visibility = gone
+        binding.etEmail.visibility = gone
+        binding.etPassword.visibility = gone
+        binding.etConfirmPassword.visibility = gone
     }
 
 
@@ -117,17 +119,17 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
      */
     private fun preSignUpConditionsFulfilled(): Boolean
     {
-        val name = et_userName.text.toString()
-        val email = etEmail.text.toString()
-        val password = etPassword.text.toString()
-        val confirmPassword = etConfirmPassword.text.toString()
+        val name = binding.etUserName.text.toString()
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
+        val confirmPassword = binding.etConfirmPassword.text.toString()
 
         if (signUpMethod == SIGN_UP_METHOD_DIRECT)
         {
             if (email.isEmpty() || password.isEmpty())
             {
                 Snackbar.make(
-                    btnLogin.rootView,
+                    binding.btnLogin.rootView,
                     "Please, enter email and password",
                     Snackbar.LENGTH_LONG
                 ).show()
@@ -136,7 +138,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             } else if (!password.contentEquals(confirmPassword))
             {
                 Snackbar.make(
-                    btnLogin.rootView,
+                    binding.btnLogin.rootView,
                     "Passwords do not match.",
                     Snackbar.LENGTH_LONG
                 ).show()
@@ -145,7 +147,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             } else if (name.length < 6)
             {
                 Snackbar.make(
-                    btnLogin.rootView,
+                    binding.btnLogin.rootView,
                     "Name must be atleast 6 characters long",
                     Snackbar.LENGTH_LONG
                 ).show()
@@ -157,7 +159,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
             if (name.length < 6)
             {
                 Snackbar.make(
-                    btnLogin.rootView,
+                    binding.btnLogin.rootView,
                     "Name must be atleast 6 characters long",
                     Snackbar.LENGTH_LONG
                 ).show()
@@ -173,8 +175,8 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
 
         _d.show()
 
-        val email = etEmail.text.toString()
-        val password = etPassword.text.toString()
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener(this).addOnFailureListener(this)
@@ -214,7 +216,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK)
         {
             imageUri = data?.data
-            imageUri?.run { iv_profilePicture.setImageURI(this) }
+            imageUri?.run { binding.ivProfilePicture.setImageURI(this) }
         }
 //        ProgressDialogOld(this).untilCompletes {
 //            imageUri = data?.data
@@ -256,9 +258,9 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
     private suspend fun uploadProfilePicAndName(userId: String)
     {
         val user = UserData()
-        user.name = et_userName.text.toString()
+        user.name = binding.etUserName.text.toString()
 
-        withContext(Dispatchers.IO)
+        withContext(IO)
         {
 
             user.profilePicPath = uploadImage()
@@ -272,7 +274,7 @@ class ActivitySignUp : AppCompatActivity(), OnSuccessListener<AuthResult>,
      * Uploads image represented by [imageUri] and returns the path of uploaded image.
      * If [imageUri] is null then an empty string is returned.
      */
-    private suspend fun uploadImage(): String = withContext(Dispatchers.IO)
+    private suspend fun uploadImage(): String = withContext(IO)
     {
 
         if (imageUri == null) return@withContext ""

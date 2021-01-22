@@ -9,29 +9,30 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.magentastudio.quotesapp.QuoteViewModel
-import com.magentastudio.quotesapp.R
 import com.magentastudio.quotesapp.Response
 import com.magentastudio.quotesapp.UI.Adapter.QuoteAdapter
-import kotlinx.android.synthetic.main.fragment_favorites.*
+import com.magentastudio.quotesapp.databinding.FragmentFavoritesBinding
 import kotlinx.coroutines.flow.collect
 
 class FragmentFavorites : Fragment()
 {
+    private val TAG = "FragmentFavorites"
+    private lateinit var binding: FragmentFavoritesBinding
 
     private val viewModel by activityViewModels<QuoteViewModel>()
 
-    val TAG = "FragmentFavorites"
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_favorites, container, false)
+    ): View
+    {
+        binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?)
     {
         super.onActivityCreated(savedInstanceState)
-
-//        shimmer.visibility = View.VISIBLE
 
         lifecycleScope.launchWhenStarted {
             viewModel.favoriteQuotes.collect {
@@ -44,8 +45,8 @@ class FragmentFavorites : Fragment()
                     {
 //                        shimmer.visibility = View.GONE
 
-                        rv_quotes.adapter =
-                            QuoteAdapter(context!!, viewModel, it.result, showOnlyFavorites = true)
+                        binding.rvQuotes.adapter =
+                            QuoteAdapter(requireContext(), viewModel, it.result, showOnlyFavorites = true)
                     }
                 }
             }
