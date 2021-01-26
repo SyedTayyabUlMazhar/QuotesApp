@@ -29,7 +29,7 @@ open class UserRepository : BaseRepository()
     companion object
     {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
-                ?: throw IllegalStateException("User not signed in")
+            ?: throw IllegalStateException("User not signed in")
 
         val userDocRef = db.document("users/$userId")
 
@@ -64,6 +64,11 @@ open class UserRepository : BaseRepository()
                     snapShotListener = docRef.addSnapshotListener { docSnapshot, exception ->
 
                         Log.i(TAG, "Received Snapshot exception==null: ${exception == null}")
+                        if(exception!=null)
+                        {
+                            Log.e(TAG, "Exception: ${exception.message}")
+                            exception.printStackTrace()
+                        }
 
                         val userData = docSnapshot?.toObject<UserData>()
                         //can be null if there is an exception, or there isn't an exception but the document doesn't exists.

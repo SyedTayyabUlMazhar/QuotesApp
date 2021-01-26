@@ -76,6 +76,9 @@ class QuoteViewModel : ViewModel()
         }
         catch (e: Exception)
         {
+            Log.e(TAG, "loadPlainQuotes: Exception: ${e.message}")
+            e.printStackTrace()
+
             _quotesOnly.value = Response.Failure("$e")
         }
     }
